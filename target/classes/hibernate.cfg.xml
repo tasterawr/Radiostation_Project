@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <!--        postgresql config-->
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/RadioStationDB</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">1234</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="connection.pool_size">1</property>
+        <property name="show_sql">false</property>
+        <property name="hibernate.hbm2ddl.auto">drop-and-create</property>
+
+
+        <!--mysql config-->
+        <!--        <property name="connection.url">jdbc:mysql://localhost:3306/stageartsounddb</property>-->
+        <!--        <property name="connection.username">root</property>-->
+        <!--        <property name="connection.password">root</property>-->
+        <!--        <property name="connection.pool_size">1</property>-->
+        <!--        <property name="show_sql">true</property>-->
+        <!--        <property name="hibernate.hbm2ddl.auto">drop-and-create</property>-->
+
+
+        <!-- Mapping files -->
+        <mapping class="org.example.DAL.Models.Artist"/>
+        <mapping class="org.example.DAL.Models.Album"/>
+        <mapping class="org.example.DAL.Models.Label"/>
+        <mapping class="org.example.DAL.Models.Genre"/>
+        <mapping class="org.example.DAL.Models.Playlist"/>
+        <mapping class="org.example.DAL.Models.RadioDj"/>
+        <mapping class="org.example.DAL.Models.RadioProgram"/>
+        <mapping class="org.example.DAL.Models.Song"/>
+
+    </session-factory>
+
+</hibernate-configuration>
