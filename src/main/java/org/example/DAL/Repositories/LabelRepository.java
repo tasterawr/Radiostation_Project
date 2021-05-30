@@ -1,8 +1,8 @@
 package org.example.DAL.Repositories;
 
-import org.example.DAL.DAO.GenreDAO;
-import org.example.DAL.Models.Genre;
-import org.example.DAL.Models.Genre_;
+import org.example.DAL.DAO.LabelDAO;
+import org.example.DAL.Models.Label;
+import org.example.DAL.Models.Label_;
 import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,75 +13,94 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-public class GenreRepository implements GenreDAO {
+public class LabelRepository implements LabelDAO {
     @Override
-    public void add(Genre genre) {
+    public void add(Label label) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.save(genre);
+        session.save(label);
 
         transaction.commit();
         session.close();
     }
 
     @Override
-    public List<Genre> getAll() {
+    public List<Label> getAll() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Genre> query = criteriaBuilder.createQuery(Genre.class);
-        Root<Genre> genreRoot = query.from(Genre.class);
-        query.select(genreRoot);
+        CriteriaQuery<Label> query = criteriaBuilder.createQuery(Label.class);
+        Root<Label> labelRoot = query.from(Label.class);
+        query.select(labelRoot);
 
-        List<Genre> genres = session.createQuery(query).getResultList();
+        List<Label> labels = session.createQuery(query).getResultList();
 
         transaction.commit();
         session.close();
-        return genres;
+        return labels;
     }
 
     @Override
-    public Genre getByGenreCode(Long genreCode) {
+    public Label getById(Long id) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Genre> query = criteriaBuilder.createQuery(Genre.class);
-        Root<Genre> genreRoot = query.from(Genre.class);
-        query.where(criteriaBuilder.equal(genreRoot.get(Genre_.genreCode), genreCode));
-        query.select(genreRoot);
+        CriteriaQuery<Label> query = criteriaBuilder.createQuery(Label.class);
+        Root<Label> labelRoot = query.from(Label.class);
+        query.where(criteriaBuilder.equal(labelRoot.get(Label_.id), id));
+        query.select(labelRoot);
 
-        Genre genre = session.createQuery(query).getSingleResult();
+        Label label = session.createQuery(query).getSingleResult();
 
         transaction.commit();
         session.close();
-        return genre;
+        return label;
     }
 
     @Override
-    public void update(Genre genre) {
+    public Label getByName(String labelName) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.update(genre);
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Label> query = criteriaBuilder.createQuery(Label.class);
+        Root<Label> labelRoot = query.from(Label.class);
+        query.where(criteriaBuilder.equal(labelRoot.get(Label_.labelName), labelName));
+        query.select(labelRoot);
+
+        Label label = session.createQuery(query).getSingleResult();
+
+        transaction.commit();
+        session.close();
+        return label;
+    }
+
+    @Override
+    public void update(Label label) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.update(label);
 
         transaction.commit();
         session.close();
     }
 
     @Override
-    public void delete(Genre genre) {
+    public void delete(Label label) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.delete(genre);
+        session.delete(label);
 
         transaction.commit();
         session.close();

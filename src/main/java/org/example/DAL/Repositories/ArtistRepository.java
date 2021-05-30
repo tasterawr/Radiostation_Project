@@ -64,6 +64,63 @@ public class ArtistRepository implements ArtistDAO {
     }
 
     @Override
+    public Artist getByName(String artistName) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Artist> query = criteriaBuilder.createQuery(Artist.class);
+        Root<Artist> artistRoot = query.from(Artist.class);
+        query.where(criteriaBuilder.equal(artistRoot.get(Artist_.artistName), artistName));
+        query.select(artistRoot);
+
+        Artist artist = session.createQuery(query).getSingleResult();
+
+        transaction.commit();
+        session.close();
+        return artist;
+    }
+
+    @Override
+    public List<Artist> getByHigherRating(Integer rating) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Artist> query = criteriaBuilder.createQuery(Artist.class);
+        Root<Artist> artistRoot = query.from(Artist.class);
+        query.where(criteriaBuilder.greaterThanOrEqualTo(artistRoot.get(Artist_.rating), rating));
+        query.select(artistRoot);
+
+        List<Artist> artists = session.createQuery(query).getResultList();
+
+        transaction.commit();
+        session.close();
+        return artists;
+    }
+
+    @Override
+    public List<Artist> getByLowerRating(Integer rating) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Artist> query = criteriaBuilder.createQuery(Artist.class);
+        Root<Artist> artistRoot = query.from(Artist.class);
+        query.where(criteriaBuilder.lessThan(artistRoot.get(Artist_.rating), rating));
+        query.select(artistRoot);
+
+        List<Artist> artists = session.createQuery(query).getResultList();
+
+        transaction.commit();
+        session.close();
+        return artists;
+    }
+
+    @Override
     public void update(Artist artist) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();

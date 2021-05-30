@@ -11,6 +11,8 @@ public interface LabelDAO {
 
     Label getById(Long id);
 
+    Label getByName(String labelName);
+
     void update(Label label);
 
     void delete(Label label);

@@ -11,6 +11,12 @@ public interface ArtistDAO {
 
     Artist getById(Long id);
 
+    Artist getByName(String artistName);
+
+    List<Artist> getByHigherRating(Integer rating);
+
+    List<Artist> getByLowerRating(Integer rating);
+
     void update(Artist artist);
 
     void delete(Artist artist);

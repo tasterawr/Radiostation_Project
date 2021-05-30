@@ -11,6 +11,8 @@ public interface RadioDjDAO {
 
     RadioDj getById(Long id);
 
+    RadioDj getByName(String djName);
+
     void update(RadioDj radioDj);
 
     void delete(RadioDj radioDj);

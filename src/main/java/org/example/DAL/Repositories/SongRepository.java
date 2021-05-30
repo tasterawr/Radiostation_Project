@@ -1,8 +1,9 @@
 package org.example.DAL.Repositories;
 
-import org.example.DAL.DAO.GenreDAO;
-import org.example.DAL.Models.Genre;
-import org.example.DAL.Models.Genre_;
+import org.example.DAL.DAO.SongDAO;
+import org.example.DAL.Models.Song;
+import org.example.DAL.Models.Song_;
+import org.example.DAL.Models.Song;
 import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,75 +14,75 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-public class GenreRepository implements GenreDAO {
+public class SongRepository implements SongDAO {
     @Override
-    public void add(Genre genre) {
+    public void add(Song song) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.save(genre);
+        session.save(song);
 
         transaction.commit();
         session.close();
     }
 
     @Override
-    public List<Genre> getAll() {
+    public List<Song> getAll() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Genre> query = criteriaBuilder.createQuery(Genre.class);
-        Root<Genre> genreRoot = query.from(Genre.class);
-        query.select(genreRoot);
+        CriteriaQuery<Song> query = criteriaBuilder.createQuery(Song.class);
+        Root<Song> songRoot = query.from(Song.class);
+        query.select(songRoot);
 
-        List<Genre> genres = session.createQuery(query).getResultList();
+        List<Song> songs = session.createQuery(query).getResultList();
 
         transaction.commit();
         session.close();
-        return genres;
+        return songs;
     }
 
     @Override
-    public Genre getByGenreCode(Long genreCode) {
+    public Song getById(Long id) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Genre> query = criteriaBuilder.createQuery(Genre.class);
-        Root<Genre> genreRoot = query.from(Genre.class);
-        query.where(criteriaBuilder.equal(genreRoot.get(Genre_.genreCode), genreCode));
-        query.select(genreRoot);
+        CriteriaQuery<Song> query = criteriaBuilder.createQuery(Song.class);
+        Root<Song> songRoot = query.from(Song.class);
+        query.where(criteriaBuilder.equal(songRoot.get(Song_.id), id));
+        query.select(songRoot);
 
-        Genre genre = session.createQuery(query).getSingleResult();
+        Song song = session.createQuery(query).getSingleResult();
 
         transaction.commit();
         session.close();
-        return genre;
+        return song;
     }
 
     @Override
-    public void update(Genre genre) {
+    public void update(Song song) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.update(genre);
+        session.update(song);
 
         transaction.commit();
         session.close();
     }
 
     @Override
-    public void delete(Genre genre) {
+    public void delete(Song song) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.delete(genre);
+        session.delete(song);
 
         transaction.commit();
         session.close();

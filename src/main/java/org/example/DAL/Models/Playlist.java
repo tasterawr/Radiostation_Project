@@ -20,6 +20,10 @@ public class Playlist {
     )
     private Set<Song> songs = new HashSet<>();
 
+    public Set<Song> getSongs() {
+        return songs;
+    }
+
     @ManyToMany(mappedBy = "playlists",cascade = CascadeType.ALL)
     private Set<RadioProgram> programs = new HashSet<>();
 
