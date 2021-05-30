@@ -1,10 +1,12 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import org.example.DAL.DAO.RadioProgramDAO;
+import org.example.DAL.Models.Playlist;
 import org.example.DAL.Models.RadioProgram;
-import org.example.DAL.Repositories.RadioProgramRepository;
+import org.example.DAL.repositories.RadioProgramRepository;
 
 import java.util.List;
+import java.util.Set;
 
 public class RadioProgramController {
     private static RadioProgramDAO radioProgramRepository = new RadioProgramRepository();
@@ -28,6 +30,12 @@ public class RadioProgramController {
 
     public RadioProgram getProgramByName(String radioProgramName){
         return radioProgramRepository.getByName(radioProgramName);
+    }
+
+    public Set<Playlist> getProgramPlaylists(Long programId){
+        RadioProgram radioProgram = radioProgramRepository.getById(programId);
+
+        return radioProgram.getPlaylists();
     }
 
     public void updateMonthlyListeners(Long programId, Integer newMonthlyListeners){

@@ -1,4 +1,4 @@
-package org.example.DAL.Repositories;
+package org.example.DAL.repositories;
 
 import org.example.DAL.DAO.ArtistDAO;
 import org.example.DAL.Models.Artist;

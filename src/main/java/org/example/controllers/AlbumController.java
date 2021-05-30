@@ -1,4 +1,4 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import org.example.DAL.DAO.AlbumDAO;
 import org.example.DAL.DAO.ArtistDAO;
@@ -8,10 +8,10 @@ import org.example.DAL.Models.Album;
 import org.example.DAL.Models.Artist;
 import org.example.DAL.Models.Genre;
 import org.example.DAL.Models.Label;
-import org.example.DAL.Repositories.AlbumRepository;
-import org.example.DAL.Repositories.ArtistRepository;
-import org.example.DAL.Repositories.GenreRepository;
-import org.example.DAL.Repositories.LabelRepository;
+import org.example.DAL.repositories.AlbumRepository;
+import org.example.DAL.repositories.ArtistRepository;
+import org.example.DAL.repositories.GenreRepository;
+import org.example.DAL.repositories.LabelRepository;
 
 import java.util.List;
 
@@ -21,19 +21,25 @@ public class AlbumController {
     private static ArtistDAO artistRepository = new ArtistRepository();
     private static LabelDAO labelRepository = new LabelRepository();
 
-    public void addAlbum(String albumName, Long genreCode, Long artistId, Integer numberOfTracks, Long labelId){
-        Genre genre = genreRepository.getByGenreCode(genreCode);
-        Artist artist = artistRepository.getById(artistId);
-        Label label = labelRepository.getById(labelId);
+    public boolean addAlbum(String albumName, Long genreCode, Long artistId, Integer numberOfTracks, Long labelId){
+        try{
+            Genre genre = genreRepository.getByGenreCode(genreCode);
+            Artist artist = artistRepository.getById(artistId);
+            Label label = labelRepository.getById(labelId);
 
-        Album album = new Album();
-        album.setAlbumName(albumName);
-        album.setGenre(genre);
-        album.setArtist(artist);
-        album.setNumberOfTracks(numberOfTracks);
-        album.setLabel(label);
+            Album album = new Album();
+            album.setAlbumName(albumName);
+            album.setGenre(genre);
+            album.setArtist(artist);
+            album.setNumberOfTracks(numberOfTracks);
+            album.setLabel(label);
 
-        albumRepository.add(album);
+            albumRepository.add(album);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
     public List<Album> getAllAlbums(){
@@ -41,7 +47,13 @@ public class AlbumController {
     }
 
     public Album getAlbumById(Long id){
-        return albumRepository.getById(id);
+        try{
+            return albumRepository.getById(id);
+        }
+        catch(Exception e){
+            return null;
+        }
+
     }
 
     public void updateAlbumName(Long albumId, String newAlbumName){
@@ -82,9 +94,17 @@ public class AlbumController {
         albumRepository.update(album);
     }
 
-    public void deleteAlbum(Long albumId){
-        Album album = albumRepository.getById(albumId);
+    public boolean deleteAlbum(Long albumId){
+        try{
+            Album album = albumRepository.getById(albumId);
 
-        albumRepository.delete(album);
+            albumRepository.delete(album);
+
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+
     }
 }

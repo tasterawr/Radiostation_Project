@@ -1,8 +1,8 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import org.example.DAL.DAO.GenreDAO;
 import org.example.DAL.Models.Genre;
-import org.example.DAL.Repositories.GenreRepository;
+import org.example.DAL.repositories.GenreRepository;
 
 import java.util.List;
 

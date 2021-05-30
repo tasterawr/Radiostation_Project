@@ -37,6 +37,7 @@
         <mapping class="org.example.DAL.Models.RadioDj"/>
         <mapping class="org.example.DAL.Models.RadioProgram"/>
         <mapping class="org.example.DAL.Models.Song"/>
+        <mapping class="org.example.DAL.Models.DBUser"/>
 
     </session-factory>
 

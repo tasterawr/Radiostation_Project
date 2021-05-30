@@ -1,11 +1,11 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import org.example.DAL.DAO.AlbumDAO;
 import org.example.DAL.DAO.SongDAO;
 import org.example.DAL.Models.Album;
 import org.example.DAL.Models.Song;
-import org.example.DAL.Repositories.AlbumRepository;
-import org.example.DAL.Repositories.SongRepository;
+import org.example.DAL.repositories.AlbumRepository;
+import org.example.DAL.repositories.SongRepository;
 
 import java.util.List;
 

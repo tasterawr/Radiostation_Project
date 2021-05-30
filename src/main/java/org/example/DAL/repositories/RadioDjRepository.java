@@ -1,8 +1,8 @@
-package org.example.DAL.Repositories;
+package org.example.DAL.repositories;
 
-import org.example.DAL.DAO.LabelDAO;
-import org.example.DAL.Models.Label;
-import org.example.DAL.Models.Label_;
+import org.example.DAL.DAO.RadioDjDAO;
+import org.example.DAL.Models.RadioDj;
+import org.example.DAL.Models.RadioDj_;
 import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,94 +13,94 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-public class LabelRepository implements LabelDAO {
+public class RadioDjRepository implements RadioDjDAO {
     @Override
-    public void add(Label label) {
+    public void add(RadioDj radioDj) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.save(label);
+        session.save(radioDj);
 
         transaction.commit();
         session.close();
     }
 
     @Override
-    public List<Label> getAll() {
+    public List<RadioDj> getAll() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Label> query = criteriaBuilder.createQuery(Label.class);
-        Root<Label> labelRoot = query.from(Label.class);
-        query.select(labelRoot);
+        CriteriaQuery<RadioDj> query = criteriaBuilder.createQuery(RadioDj.class);
+        Root<RadioDj> radioDjRoot = query.from(RadioDj.class);
+        query.select(radioDjRoot);
 
-        List<Label> labels = session.createQuery(query).getResultList();
+        List<RadioDj> radioDjs = session.createQuery(query).getResultList();
 
         transaction.commit();
         session.close();
-        return labels;
+        return radioDjs;
     }
 
     @Override
-    public Label getById(Long id) {
+    public RadioDj getById(Long id) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Label> query = criteriaBuilder.createQuery(Label.class);
-        Root<Label> labelRoot = query.from(Label.class);
-        query.where(criteriaBuilder.equal(labelRoot.get(Label_.id), id));
-        query.select(labelRoot);
+        CriteriaQuery<RadioDj> query = criteriaBuilder.createQuery(RadioDj.class);
+        Root<RadioDj> radioDjRoot = query.from(RadioDj.class);
+        query.where(criteriaBuilder.equal(radioDjRoot.get(RadioDj_.id), id));
+        query.select(radioDjRoot);
 
-        Label label = session.createQuery(query).getSingleResult();
+        RadioDj radioDj = session.createQuery(query).getSingleResult();
 
         transaction.commit();
         session.close();
-        return label;
+        return radioDj;
     }
 
     @Override
-    public Label getByName(String labelName) {
+    public RadioDj getByName(String djName) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Label> query = criteriaBuilder.createQuery(Label.class);
-        Root<Label> labelRoot = query.from(Label.class);
-        query.where(criteriaBuilder.equal(labelRoot.get(Label_.labelName), labelName));
-        query.select(labelRoot);
+        CriteriaQuery<RadioDj> query = criteriaBuilder.createQuery(RadioDj.class);
+        Root<RadioDj> radioDjRoot = query.from(RadioDj.class);
+        query.where(criteriaBuilder.equal(radioDjRoot.get(RadioDj_.djName), djName));
+        query.select(radioDjRoot);
 
-        Label label = session.createQuery(query).getSingleResult();
+        RadioDj radioDj = session.createQuery(query).getSingleResult();
 
         transaction.commit();
         session.close();
-        return label;
+        return radioDj;
     }
 
     @Override
-    public void update(Label label) {
+    public void update(RadioDj radioDj) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.update(label);
+        session.update(radioDj);
 
         transaction.commit();
         session.close();
     }
 
     @Override
-    public void delete(Label label) {
+    public void delete(RadioDj radioDj) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.delete(label);
+        session.delete(radioDj);
 
         transaction.commit();
         session.close();

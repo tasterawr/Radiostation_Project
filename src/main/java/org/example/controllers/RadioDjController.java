@@ -1,8 +1,8 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import org.example.DAL.DAO.RadioDjDAO;
 import org.example.DAL.Models.RadioDj;
-import org.example.DAL.Repositories.RadioDjRepository;
+import org.example.DAL.repositories.RadioDjRepository;
 
 import java.util.List;
 

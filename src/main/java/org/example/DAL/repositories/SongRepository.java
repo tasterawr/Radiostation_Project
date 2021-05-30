@@ -1,8 +1,8 @@
-package org.example.DAL.Repositories;
+package org.example.DAL.repositories;
 
-import org.example.DAL.DAO.PlaylistDAO;
-import org.example.DAL.Models.Playlist;
-import org.example.DAL.Models.Playlist_;
+import org.example.DAL.DAO.SongDAO;
+import org.example.DAL.Models.Song;
+import org.example.DAL.Models.Song_;
 import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,75 +13,75 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-public class PlaylistRepository implements PlaylistDAO {
+public class SongRepository implements SongDAO {
     @Override
-    public void add(Playlist playlist) {
+    public void add(Song song) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.save(playlist);
+        session.save(song);
 
         transaction.commit();
         session.close();
     }
 
     @Override
-    public List<Playlist> getAll() {
+    public List<Song> getAll() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Playlist> query = criteriaBuilder.createQuery(Playlist.class);
-        Root<Playlist> playlistRoot = query.from(Playlist.class);
-        query.select(playlistRoot);
+        CriteriaQuery<Song> query = criteriaBuilder.createQuery(Song.class);
+        Root<Song> songRoot = query.from(Song.class);
+        query.select(songRoot);
 
-        List<Playlist> playlists = session.createQuery(query).getResultList();
+        List<Song> songs = session.createQuery(query).getResultList();
 
         transaction.commit();
         session.close();
-        return playlists;
+        return songs;
     }
 
     @Override
-    public Playlist getById(Long id) {
+    public Song getById(Long id) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Playlist> query = criteriaBuilder.createQuery(Playlist.class);
-        Root<Playlist> playlistRoot = query.from(Playlist.class);
-        query.where(criteriaBuilder.equal(playlistRoot.get(Playlist_.id), id));
-        query.select(playlistRoot);
+        CriteriaQuery<Song> query = criteriaBuilder.createQuery(Song.class);
+        Root<Song> songRoot = query.from(Song.class);
+        query.where(criteriaBuilder.equal(songRoot.get(Song_.id), id));
+        query.select(songRoot);
 
-        Playlist playlist = session.createQuery(query).getSingleResult();
+        Song song = session.createQuery(query).getSingleResult();
 
         transaction.commit();
         session.close();
-        return playlist;
+        return song;
     }
 
     @Override
-    public void update(Playlist playlist) {
+    public void update(Song song) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.update(playlist);
+        session.update(song);
 
         transaction.commit();
         session.close();
     }
 
     @Override
-    public void delete(Playlist playlist) {
+    public void delete(Song song) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        session.delete(playlist);
+        session.delete(song);
 
         transaction.commit();
         session.close();

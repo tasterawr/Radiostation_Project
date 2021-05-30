@@ -2,19 +2,21 @@ package org.example;
 
 import org.example.DAL.Models.*;
 import org.example.util.HibernateUtil;
+import org.example.util.StringHandler;
+import org.example.view.Navigation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import java.util.Calendar;
 import java.sql.Date;
-import java.util.GregorianCalendar;
 
 public class Main {
     public static void main(String[] args) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
         loadData(sessionFactory.openSession());
+        Navigation navigation = new Navigation();
+        navigation.displayLoginPage();
         HibernateUtil.shutdown();
     }
 
@@ -82,6 +84,10 @@ public class Main {
         album3.setLabel(label3);
         album3.setNumberOfTracks(14);
 
+        DBUser user = new DBUser();
+        user.setEmail("mail@gmail.com");
+        user.setPassword(StringHandler.encryptString("1234abc"));
+
         session.save(artist1);
         session.save(artist2);
         session.save(artist3);
@@ -94,6 +100,7 @@ public class Main {
         session.save(album1);
         session.save(album2);
         session.save(album3);
+        session.save(user);
 
         transaction.commit();
         session.close();

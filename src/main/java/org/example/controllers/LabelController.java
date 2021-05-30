@@ -1,8 +1,8 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import org.example.DAL.DAO.LabelDAO;
 import org.example.DAL.Models.Label;
-import org.example.DAL.Repositories.LabelRepository;
+import org.example.DAL.repositories.LabelRepository;
 
 import java.sql.Date;
 import java.util.List;

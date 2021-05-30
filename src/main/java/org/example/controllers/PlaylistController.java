@@ -1,9 +1,9 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import org.example.DAL.DAO.PlaylistDAO;
 import org.example.DAL.Models.Playlist;
 import org.example.DAL.Models.Song;
-import org.example.DAL.Repositories.PlaylistRepository;
+import org.example.DAL.repositories.PlaylistRepository;
 
 import java.util.List;
 import java.util.Set;

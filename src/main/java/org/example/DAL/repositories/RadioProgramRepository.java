@@ -1,9 +1,8 @@
-package org.example.DAL.Repositories;
+package org.example.DAL.repositories;
 
 import org.example.DAL.DAO.RadioProgramDAO;
 import org.example.DAL.Models.RadioProgram;
 import org.example.DAL.Models.RadioProgram_;
-import org.example.DAL.Models.RadioProgram;
 import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

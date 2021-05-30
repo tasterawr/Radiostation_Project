@@ -1,8 +1,8 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import org.example.DAL.DAO.ArtistDAO;
 import org.example.DAL.Models.Artist;
-import org.example.DAL.Repositories.ArtistRepository;
+import org.example.DAL.repositories.ArtistRepository;
 
 import java.sql.Date;
 import java.util.List;

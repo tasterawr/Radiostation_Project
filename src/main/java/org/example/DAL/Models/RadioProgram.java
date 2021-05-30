@@ -16,6 +16,10 @@ public class RadioProgram {
 
     private Integer songOrderPrice;
 
+    public Set<Playlist> getPlaylists() {
+        return playlists;
+    }
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "Program_playlists",
