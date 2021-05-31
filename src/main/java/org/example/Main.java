@@ -13,15 +13,15 @@ import java.sql.Date;
 public class Main {
     public static void main(String[] args) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-
         loadData(sessionFactory.openSession());
+
         Navigation navigation = new Navigation();
         navigation.displayLoginPage();
+
         HibernateUtil.shutdown();
     }
 
     private static void loadData(Session session){
-
         final Transaction transaction = session.beginTransaction();
 
         Artist artist1 = new Artist();
@@ -88,6 +88,48 @@ public class Main {
         user.setEmail("mail@gmail.com");
         user.setPassword(StringHandler.encryptString("1234abc"));
 
+        Song song1 = new Song();
+        song1.setSongName("The Unforgiven III");
+        song1.setAlbum(album1);
+        song1.setDuration(487);
+        song1.setMonthlyOrders(7);
+        song1.setRating(14);
+
+        Song song2 = new Song();
+        song1.setSongName("My Apocalypse");
+        song1.setAlbum(album1);
+        song1.setDuration(301);
+        song1.setMonthlyOrders(4);
+        song1.setRating(8);
+
+        Song song3 = new Song();
+        song1.setSongName("Let It Happen");
+        song1.setAlbum(album2);
+        song1.setDuration(486);
+        song1.setMonthlyOrders(12);
+        song1.setRating(24);
+
+        Song song4 = new Song();
+        song1.setSongName("Yes I'm Changing");
+        song1.setAlbum(album2);
+        song1.setDuration(270);
+        song1.setMonthlyOrders(10);
+        song1.setRating(20);
+
+        Song song5 = new Song();
+        song1.setSongName("Something I Do");
+        song1.setAlbum(album3);
+        song1.setDuration(225);
+        song1.setMonthlyOrders(8);
+        song1.setRating(16);
+
+        Song song6 = new Song();
+        song1.setSongName("Lie To Me");
+        song1.setAlbum(album3);
+        song1.setDuration(304);
+        song1.setMonthlyOrders(7);
+        song1.setRating(14);
+
         session.save(artist1);
         session.save(artist2);
         session.save(artist3);
@@ -101,6 +143,12 @@ public class Main {
         session.save(album2);
         session.save(album3);
         session.save(user);
+        session.save(song1);
+        session.save(song2);
+        session.save(song3);
+        session.save(song4);
+        session.save(song5);
+        session.save(song6);
 
         transaction.commit();
         session.close();

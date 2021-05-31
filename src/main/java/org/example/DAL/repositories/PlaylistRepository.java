@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -45,7 +46,7 @@ public class PlaylistRepository implements PlaylistDAO {
     }
 
     @Override
-    public Playlist getById(Long id) {
+    public Playlist getById(Long id) throws NoResultException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -54,6 +55,25 @@ public class PlaylistRepository implements PlaylistDAO {
         CriteriaQuery<Playlist> query = criteriaBuilder.createQuery(Playlist.class);
         Root<Playlist> playlistRoot = query.from(Playlist.class);
         query.where(criteriaBuilder.equal(playlistRoot.get(Playlist_.id), id));
+        query.select(playlistRoot);
+
+        Playlist playlist = session.createQuery(query).getSingleResult();
+
+        transaction.commit();
+        session.close();
+        return playlist;
+    }
+
+    @Override
+    public Playlist getByName(String playlistName) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Playlist> query = criteriaBuilder.createQuery(Playlist.class);
+        Root<Playlist> playlistRoot = query.from(Playlist.class);
+        query.where(criteriaBuilder.equal(playlistRoot.get(Playlist_.playlistName), playlistName));
         query.select(playlistRoot);
 
         Playlist playlist = session.createQuery(query).getSingleResult();
@@ -76,7 +96,7 @@ public class PlaylistRepository implements PlaylistDAO {
     }
 
     @Override
-    public void delete(Playlist playlist) {
+    public void delete(Playlist playlist) throws NoResultException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();

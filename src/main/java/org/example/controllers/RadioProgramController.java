@@ -1,8 +1,10 @@
 package org.example.controllers;
 
+import org.example.DAL.DAO.PlaylistDAO;
 import org.example.DAL.DAO.RadioProgramDAO;
 import org.example.DAL.Models.Playlist;
 import org.example.DAL.Models.RadioProgram;
+import org.example.DAL.repositories.PlaylistRepository;
 import org.example.DAL.repositories.RadioProgramRepository;
 
 import java.util.List;
@@ -10,14 +12,27 @@ import java.util.Set;
 
 public class RadioProgramController {
     private static RadioProgramDAO radioProgramRepository = new RadioProgramRepository();
+    private static PlaylistDAO playlistRepository = new PlaylistRepository();
 
-    public void addRadioProgram(String radioProgramName, Integer monthlyListeners, Integer songOrderPrice){
-        RadioProgram radioProgram = new RadioProgram();
-        radioProgram.setRadioProgramName(radioProgramName);
-        radioProgram.setMonthlyListeners(monthlyListeners);
-        radioProgram.setSongOrderPrice(songOrderPrice);
+    public boolean addRadioProgram(String radioProgramName, Integer monthlyListeners, Integer songOrderPrice){
+        try{
+            RadioProgram radioProgramCheck = radioProgramRepository.getByName(radioProgramName);
+            return false;
+        }
+        catch (Exception e){
+            try{
+                RadioProgram radioProgram = new RadioProgram();
+                radioProgram.setRadioProgramName(radioProgramName);
+                radioProgram.setMonthlyListeners(monthlyListeners);
+                radioProgram.setSongOrderPrice(songOrderPrice);
 
-        radioProgramRepository.add(radioProgram);
+                radioProgramRepository.add(radioProgram);
+                return true;
+            }
+            catch (Exception ex){
+                return false;
+            }
+        }
     }
 
     public List<RadioProgram> getAllRadioPrograms(){
@@ -25,36 +40,128 @@ public class RadioProgramController {
     }
 
     public RadioProgram getProgramById(Long programId){
-        return radioProgramRepository.getById(programId);
+        try{
+            return radioProgramRepository.getById(programId);
+        }
+        catch (Exception e){
+            return null;
+        }
     }
 
     public RadioProgram getProgramByName(String radioProgramName){
-        return radioProgramRepository.getByName(radioProgramName);
+        try {
+            return radioProgramRepository.getByName(radioProgramName);
+        }
+        catch (Exception e){
+            return null;
+        }
     }
 
     public Set<Playlist> getProgramPlaylists(Long programId){
-        RadioProgram radioProgram = radioProgramRepository.getById(programId);
+        try{
+            RadioProgram radioProgram = radioProgramRepository.getById(programId);
 
-        return radioProgram.getPlaylists();
+            return radioProgram.getPlaylists();
+        }
+        catch (Exception e){
+            return null;
+        }
     }
 
-    public void updateMonthlyListeners(Long programId, Integer newMonthlyListeners){
-        RadioProgram radioProgram = radioProgramRepository.getById(programId);
-        radioProgram.setMonthlyListeners(newMonthlyListeners);
+    public boolean updateRadioProgramName(Long programId, String newRadioProgramName){
+        try{
+            RadioProgram radioProgram = radioProgramRepository.getById(programId);
+            radioProgram.setRadioProgramName(newRadioProgramName);
 
-        radioProgramRepository.update(radioProgram);
+            radioProgramRepository.update(radioProgram);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
-    public void updateSongOrderPrice(Long programId, Integer newSongOrderPrice){
-        RadioProgram radioProgram = radioProgramRepository.getById(programId);
-        radioProgram.setSongOrderPrice(newSongOrderPrice);
+    public boolean updateMonthlyListeners(Long programId, Integer newMonthlyListeners){
+        if (newMonthlyListeners < 0)
+            return false;
 
-        radioProgramRepository.update(radioProgram);
+        try{
+            RadioProgram radioProgram = radioProgramRepository.getById(programId);
+            radioProgram.setMonthlyListeners(newMonthlyListeners);
+
+            radioProgramRepository.update(radioProgram);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
-    public void deleteRadioProgram(Long programId){
-        RadioProgram radioProgram = radioProgramRepository.getById(programId);
+    public boolean updateSongOrderPrice(Long programId, Integer newSongOrderPrice){
+        if (newSongOrderPrice < 0)
+            return false;
 
-        radioProgramRepository.delete(radioProgram);
+        try{
+            RadioProgram radioProgram = radioProgramRepository.getById(programId);
+            radioProgram.setSongOrderPrice(newSongOrderPrice);
+
+            radioProgramRepository.update(radioProgram);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean addPlaylistToProgram(Long programId, Long playlistId){
+        try{
+            RadioProgram radioProgram = radioProgramRepository.getById(programId);
+            Playlist playlist = playlistRepository.getById(playlistId);
+            radioProgram.addPlaylist(playlist);
+
+            radioProgramRepository.update(radioProgram);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean removePlaylistFromProgram(Long programId, Long playlistId){
+        try{
+            RadioProgram radioProgram = radioProgramRepository.getById(programId);
+            Playlist playlist = playlistRepository.getById(playlistId);
+            radioProgram.removePlaylist(playlist);
+
+            radioProgramRepository.update(radioProgram);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean deleteRadioProgram(Long programId){
+        try {
+            RadioProgram radioProgram = radioProgramRepository.getById(programId);
+
+            radioProgramRepository.delete(radioProgram);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean deleteRadioProgram(String radioProgramName){
+        try {
+            RadioProgram radioProgram = radioProgramRepository.getByName(radioProgramName);
+
+            radioProgramRepository.delete(radioProgram);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 }

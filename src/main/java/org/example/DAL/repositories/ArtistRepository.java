@@ -7,7 +7,9 @@ import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.TransactionException;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -15,7 +17,7 @@ import java.util.List;
 
 public class ArtistRepository implements ArtistDAO {
     @Override
-    public void add(Artist artist) {
+    public void add(Artist artist) throws TransactionException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -45,7 +47,7 @@ public class ArtistRepository implements ArtistDAO {
     }
 
     @Override
-    public Artist getById(Long id) {
+    public Artist getById(Long id) throws NoResultException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -121,7 +123,7 @@ public class ArtistRepository implements ArtistDAO {
     }
 
     @Override
-    public void update(Artist artist) {
+    public void update(Artist artist) throws TransactionException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();

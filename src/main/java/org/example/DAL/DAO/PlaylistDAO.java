@@ -11,6 +11,8 @@ public interface PlaylistDAO {
 
     Playlist getById(Long id);
 
+    Playlist getByName(String playlistName);
+
     void update(Playlist playlist);
 
     void delete(Playlist playlist);

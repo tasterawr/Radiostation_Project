@@ -10,13 +10,21 @@ import java.util.List;
 public class ArtistController {
     private static ArtistDAO artistRepository = new ArtistRepository();
 
-    public void addArtist(String artistName, String careerBeginDate, Integer rating){
-        Artist artist = new Artist();
-        artist.setArtistName(artistName);
-        artist.setCareerBeginDate(Date.valueOf(careerBeginDate));
-        artist.setRating(rating);
+    public boolean addArtist(String artistName, String careerBeginDate, Integer rating){
+        try{
+            Artist artistCheck = artistRepository.getByName(artistName);
 
-        artistRepository.add(artist);
+            return false;
+        }
+       catch(Exception e) {
+           Artist artist = new Artist();
+           artist.setArtistName(artistName);
+           artist.setCareerBeginDate(Date.valueOf(careerBeginDate));
+           artist.setRating(rating);
+
+           artistRepository.add(artist);
+           return true;
+       }
     }
 
     public List<Artist> getAllArtists(){
@@ -24,7 +32,21 @@ public class ArtistController {
     }
 
     public Artist getArtistById(Long id){
-        return artistRepository.getById(id);
+        try{
+            return artistRepository.getById(id);
+        }
+        catch(Exception e){
+            return null;
+        }
+    }
+
+    public Artist getArtistByName(String artistName){
+        try{
+            return artistRepository.getByName(artistName);
+        }
+        catch(Exception e){
+            return null;
+        }
     }
 
     public List<Artist> getArtistsWithRatingHigher(Integer rating){
@@ -35,23 +57,75 @@ public class ArtistController {
         return artistRepository.getByLowerRating(rating);
     }
 
-    public void updateArtistCareerBeginDate(Long artistId, String newCareerBeginDate){
-        Artist artist = artistRepository.getById(artistId);
-        artist.setCareerBeginDate(Date.valueOf(newCareerBeginDate));
+    public boolean updateArtistName(Long artistId, String newArtistName){
+        if (artistRepository.getByName(newArtistName) != null)
+            return false;
 
-        artistRepository.update(artist);
+        try{
+            Artist artist = artistRepository.getById(artistId);
+            artist.setArtistName(newArtistName);
+
+            artistRepository.update(artist);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
-    public void updateArtistRating(Long artistId, Integer rating){
-        Artist artist = artistRepository.getById(artistId);
-        artist.setRating(rating);
+    public boolean updateArtistCareerBeginDate(Long artistId, String newCareerBeginDate){
+        try{
+            Artist artist = artistRepository.getById(artistId);
+            artist.setCareerBeginDate(Date.valueOf(newCareerBeginDate));
 
-        artistRepository.update(artist);
+            artistRepository.update(artist);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+
     }
 
-    public void deleteArtist(Long artistId){
-        Artist artist = artistRepository.getById(artistId);
+    public boolean updateArtistRating(Long artistId, Integer rating){
+        if (rating < 0)
+            return false;
 
-        artistRepository.delete(artist);
+        try{
+            Artist artist = artistRepository.getById(artistId);
+            artist.setRating(rating);
+
+            artistRepository.update(artist);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+
+    }
+
+    public boolean deleteArtist(Long artistId){
+        try{
+            Artist artist = artistRepository.getById(artistId);
+
+            artistRepository.delete(artist);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+
+    public boolean deleteArtist(String artistName){
+        try{
+            Artist artist = artistRepository.getByName(artistName);
+
+            artistRepository.delete(artist);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+
     }
 }

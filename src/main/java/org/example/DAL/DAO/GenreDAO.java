@@ -11,6 +11,8 @@ public interface GenreDAO {
 
     Genre getByGenreCode(Long genreCode);
 
+    Genre getByGenreName(String genreName);
+
     void update(Genre genre);
 
     void delete(Genre genre);

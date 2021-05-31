@@ -13,51 +13,111 @@ public class SongController {
     private static SongDAO songRepository = new SongRepository();
     private static AlbumDAO albumRepository = new AlbumRepository();
 
-    public void addSong(String songName, Long albumId, Integer duration, Integer monthlyOrders, Integer rating){
-        Song song = new Song();
-        Album album = albumRepository.getById(albumId);
-        song.setSongName(songName);
-        song.setAlbum(album);
-        song.setDuration(duration);
-        song.setMonthlyOrders(monthlyOrders);
-        song.setRating(rating);
+    public boolean addSong(String songName, Long albumId, Integer duration, Integer monthlyOrders, Integer rating){
+        try{
+            Song song = new Song();
+            Album album = albumRepository.getById(albumId);
+            song.setSongName(songName);
+            song.setAlbum(album);
+            song.setDuration(duration);
+            song.setMonthlyOrders(monthlyOrders);
+            song.setRating(rating);
 
-        songRepository.add(song);
+            songRepository.add(song);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
     public List<Song> getAllSongs(){
         return songRepository.getAll();
     }
 
-    public Song getSongById(Long songId){
+    public Song getSongById(Long songId) {
         return songRepository.getById(songId);
     }
 
-    public void updateSongAlbum(Long songId, Long newAlbumId){
-        Album album = albumRepository.getById(newAlbumId);
-        Song song = songRepository.getById(songId);
-        song.setAlbum(album);
+    public boolean updateSongName(Long songId, String newSongName){
+        try {
+            Song song = songRepository.getById(songId);
+            song.setSongName(newSongName);
 
-        songRepository.update(song);
+            songRepository.update(song);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
-    public void updateMonthlyOrders(Long songId, Integer newMonthlyOrders){
-        Song song = songRepository.getById(songId);
-        song.setMonthlyOrders(newMonthlyOrders);
+    public boolean updateSongAlbum(Long songId, Long newAlbumId){
+        try{
+            Album album = albumRepository.getById(newAlbumId);
+            Song song = songRepository.getById(songId);
+            song.setAlbum(album);
 
-        songRepository.update(song);
+            songRepository.update(song);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+
     }
 
-    public void updateRating(Long songId, Integer newRating){
-        Song song = songRepository.getById(songId);
-        song.setRating(newRating);
+    public boolean updateMonthlyOrders(Long songId, Integer newMonthlyOrders){
+        try{
+            Song song = songRepository.getById(songId);
+            song.setMonthlyOrders(newMonthlyOrders);
 
-        songRepository.update(song);
+            songRepository.update(song);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+
     }
 
-    public void deleteSong(Long songId){
-        Song song = songRepository.getById(songId);
+    public boolean updateRating(Long songId, Integer newRating){
+        try{
+            Song song = songRepository.getById(songId);
+            song.setRating(newRating);
 
-        songRepository.delete(song);
+            songRepository.update(song);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+
+    }
+
+    public boolean updateDuration(Long songId, Integer newDuration){
+        try{
+            Song song = songRepository.getById(songId);
+            song.setDuration(newDuration);
+
+            songRepository.update(song);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+
+    public boolean deleteSong(Long songId){
+        try {
+            Song song = songRepository.getById(songId);
+
+            songRepository.delete(song);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+
     }
 }

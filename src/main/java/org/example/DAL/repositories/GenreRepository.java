@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -45,7 +46,7 @@ public class GenreRepository implements GenreDAO {
     }
 
     @Override
-    public Genre getByGenreCode(Long genreCode) {
+    public Genre getByGenreCode(Long genreCode) throws NoResultException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -54,6 +55,25 @@ public class GenreRepository implements GenreDAO {
         CriteriaQuery<Genre> query = criteriaBuilder.createQuery(Genre.class);
         Root<Genre> genreRoot = query.from(Genre.class);
         query.where(criteriaBuilder.equal(genreRoot.get(Genre_.genreCode), genreCode));
+        query.select(genreRoot);
+
+        Genre genre = session.createQuery(query).getSingleResult();
+
+        transaction.commit();
+        session.close();
+        return genre;
+    }
+
+    @Override
+    public Genre getByGenreName(String genreName) throws NoResultException {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Genre> query = criteriaBuilder.createQuery(Genre.class);
+        Root<Genre> genreRoot = query.from(Genre.class);
+        query.where(criteriaBuilder.equal(genreRoot.get(Genre_.genreName), genreName));
         query.select(genreRoot);
 
         Genre genre = session.createQuery(query).getSingleResult();

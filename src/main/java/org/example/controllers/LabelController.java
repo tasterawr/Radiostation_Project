@@ -10,12 +10,24 @@ import java.util.List;
 public class LabelController {
     private static LabelDAO labelRepository = new LabelRepository();
 
-    public void addLabel(String labelName, String labelCreationDate){
-        Label label = new Label();
-        label.setLabelName(labelName);
-        label.setLabelCreationDate(Date.valueOf(labelCreationDate));
+    public boolean addLabel(String labelName, String labelCreationDate){
+        try{
+            labelRepository.getByName(labelName);
+            return false;
+        }
+        catch(Exception e){
+            try{
+                Label label = new Label();
+                label.setLabelName(labelName);
+                label.setLabelCreationDate(Date.valueOf(labelCreationDate));
 
-        labelRepository.add(label);
+                labelRepository.add(label);
+                return true;
+            }
+            catch(Exception ex){
+                return false;
+            }
+        }
     }
 
     public List<Label> getAllLabels(){
@@ -30,23 +42,48 @@ public class LabelController {
         return labelRepository.getByName(labelName);
     }
 
-    public void updateLabelName(Long labelId, String newLabelName){
-        Label label = labelRepository.getById(labelId);
-        label.setLabelName(newLabelName);
+    public boolean updateLabelName(Long labelId, String newLabelName){
+        try{
+            labelRepository.getByName(newLabelName);
+            return false;
+        }
+        catch(Exception e){
+            try{
+                Label label = labelRepository.getById(labelId);
+                label.setLabelName(newLabelName);
 
-        labelRepository.update(label);
+                labelRepository.update(label);
+                return true;
+            }
+            catch(Exception ex){
+                return false;
+            }
+        }
     }
 
-    public void updateLabelCreationDate(Long labelId, String newCreationDate){
-        Label label = labelRepository.getById(labelId);
-        label.setLabelCreationDate(Date.valueOf(newCreationDate));
+    public boolean updateLabelCreationDate(Long labelId, String newCreationDate){
+        try{
+            Label label = labelRepository.getById(labelId);
+            label.setLabelCreationDate(Date.valueOf(newCreationDate));
 
-        labelRepository.update(label);
+            labelRepository.update(label);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+
     }
 
-    public void deleteLabel(Long labelId){
-        Label label = labelRepository.getById(labelId);
+    public boolean deleteLabel(Long labelId){
+        try{
+            Label label = labelRepository.getById(labelId);
 
-        labelRepository.delete(label);
+            labelRepository.delete(label);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 }

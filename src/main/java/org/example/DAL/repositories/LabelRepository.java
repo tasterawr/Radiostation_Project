@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -45,7 +46,7 @@ public class LabelRepository implements LabelDAO {
     }
 
     @Override
-    public Label getById(Long id) {
+    public Label getById(Long id) throws NoResultException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -64,7 +65,7 @@ public class LabelRepository implements LabelDAO {
     }
 
     @Override
-    public Label getByName(String labelName) {
+    public Label getByName(String labelName) throws NoResultException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();

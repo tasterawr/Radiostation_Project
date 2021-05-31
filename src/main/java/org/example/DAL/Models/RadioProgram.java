@@ -10,6 +10,7 @@ public class RadioProgram {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String radioProgramName;
 
     private Integer monthlyListeners;
@@ -62,5 +63,13 @@ public class RadioProgram {
 
     public void setSongOrderPrice(Integer songOrderPrice) {
         this.songOrderPrice = songOrderPrice;
+    }
+
+    public void addPlaylist(Playlist playlist){
+        playlists.add(playlist);
+    }
+
+    public void removePlaylist(Playlist playlist){
+        playlists.remove(playlist);
     }
 }

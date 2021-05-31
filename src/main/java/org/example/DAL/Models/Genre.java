@@ -9,6 +9,7 @@ public class Genre {
     @Column(name="id")
     private Long genreCode;
 
+    @Column(unique = true)
     private String genreName;
 
     private String description;

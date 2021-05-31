@@ -21,16 +21,45 @@ public class RadioDjController {
     }
 
     public RadioDj getRadioDjById(Long djId){
-        return radioDjRepository.getById(djId);
+        try{
+            return radioDjRepository.getById(djId);
+        }
+        catch(Exception e){
+            return null;
+        }
     }
 
     public RadioDj getRadioDjByName(String djName){
-        return radioDjRepository.getByName(djName);
+        try{
+            return radioDjRepository.getByName(djName);
+        }
+        catch (Exception e){
+            return null;
+        }
     }
 
-    public void deleteDj(Long djId){
-        RadioDj radioDj = radioDjRepository.getById(djId);
+    public boolean updateRadioDjName(Long djId, String newRadioDjName){
+        try{
+            RadioDj radioDj = radioDjRepository.getById(djId);
+            radioDj.setDjName(newRadioDjName);
 
-        radioDjRepository.delete(radioDj);
+            radioDjRepository.update(radioDj);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean deleteDj(Long djId){
+        try{
+            RadioDj radioDj = radioDjRepository.getById(djId);
+
+            radioDjRepository.delete(radioDj);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 }

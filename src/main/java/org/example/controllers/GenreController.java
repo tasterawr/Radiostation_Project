@@ -9,12 +9,19 @@ import java.util.List;
 public class GenreController {
     private static GenreDAO genreRepository = new GenreRepository();
 
-    public void addGenre(String genreName, String description){
-        Genre genre = new Genre();
-        genre.setGenreName(genreName);
-        genre.setDescription(description);
+    public boolean addGenre(String genreName, String description){
+        try{
+            Genre genreCheck = genreRepository.getByGenreName(genreName);
+            return false;
+        }
+        catch(Exception e){
+            Genre genre = new Genre();
+            genre.setGenreName(genreName);
+            genre.setDescription(description);
 
-        genreRepository.add(genre);
+            genreRepository.add(genre);
+            return true;
+        }
     }
 
     public List<Genre> getAllGenres(){
@@ -25,23 +32,54 @@ public class GenreController {
         return genreRepository.getByGenreCode(genreCode);
     }
 
-    public void setGenreName(Long genreCode, String newGenreName){
-        Genre genre = genreRepository.getByGenreCode(genreCode);
-        genre.setGenreName(newGenreName);
+    public boolean setGenreName(Long genreCode, String newGenreName){
+        try{
+            Genre genre = genreRepository.getByGenreCode(genreCode);
+            genre.setGenreName(newGenreName);
 
-        genreRepository.update(genre);
+            genreRepository.update(genre);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
-    public void setGenreDescription(Long genreCode, String newDescription){
-        Genre genre = genreRepository.getByGenreCode(genreCode);
-        genre.setDescription(newDescription);
+    public boolean setGenreDescription(Long genreCode, String newDescription){
+        try{
+            Genre genre = genreRepository.getByGenreCode(genreCode);
+            genre.setDescription(newDescription);
 
-        genreRepository.update(genre);
+            genreRepository.update(genre);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
-    public void deleteGenre(Long genreCode){
-        Genre genre = genreRepository.getByGenreCode(genreCode);
+    public boolean deleteGenre(Long genreCode){
+        try{
+            Genre genre = genreRepository.getByGenreCode(genreCode);
 
-        genreRepository.delete(genre);
+            genreRepository.delete(genre);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+
+    }
+
+    public boolean deleteGenre(String genreName){
+        try{
+            Genre genre = genreRepository.getByGenreName(genreName);
+
+            genreRepository.delete(genre);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 }

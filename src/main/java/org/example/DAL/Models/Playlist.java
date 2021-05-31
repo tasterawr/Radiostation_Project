@@ -46,4 +46,12 @@ public class Playlist {
     public void setPlaylistName(String playlistName) {
         this.playlistName = playlistName;
     }
+
+    public void addSong(Song song){
+        songs.add(song);
+    }
+
+    public void removeSong(Song song){
+        songs.remove(song);
+    }
 }

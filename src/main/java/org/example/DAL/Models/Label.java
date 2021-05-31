@@ -1,9 +1,6 @@
 package org.example.DAL.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -12,6 +9,7 @@ public class Label {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String labelName;
 
     private Date labelCreationDate;
