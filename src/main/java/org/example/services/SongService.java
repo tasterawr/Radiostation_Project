@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.DAL.DAO.AlbumDAO;
 import org.example.DAL.DAO.SongDAO;
@@ -9,7 +9,7 @@ import org.example.DAL.repositories.SongRepository;
 
 import java.util.List;
 
-public class SongController {
+public class SongService {
     private static SongDAO songRepository = new SongRepository();
     private static AlbumDAO albumRepository = new AlbumRepository();
 

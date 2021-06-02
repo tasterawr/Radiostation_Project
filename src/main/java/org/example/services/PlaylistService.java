@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.DAL.DAO.PlaylistDAO;
 import org.example.DAL.DAO.SongDAO;
@@ -7,10 +7,10 @@ import org.example.DAL.Models.Song;
 import org.example.DAL.repositories.PlaylistRepository;
 import org.example.DAL.repositories.SongRepository;
 
+import javax.persistence.NoResultException;
 import java.util.List;
-import java.util.Set;
 
-public class PlaylistController {
+public class PlaylistService {
     private static PlaylistDAO playlistRepository = new PlaylistRepository();
     private static SongDAO songRepository = new SongRepository();
 
@@ -100,7 +100,7 @@ public class PlaylistController {
             playlistRepository.update(playlist);
             return true;
         }
-        catch(Exception e){
+        catch(NoResultException e){
             return false;
         }
     }

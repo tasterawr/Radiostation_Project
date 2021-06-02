@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.DAL.DAO.ArtistDAO;
 import org.example.DAL.Models.Artist;
@@ -7,7 +7,7 @@ import org.example.DAL.repositories.ArtistRepository;
 import java.sql.Date;
 import java.util.List;
 
-public class ArtistController {
+public class ArtistService {
     private static ArtistDAO artistRepository = new ArtistRepository();
 
     public boolean addArtist(String artistName, String careerBeginDate, Integer rating){

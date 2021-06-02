@@ -1,6 +1,8 @@
 package org.example.DAL.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,6 +18,7 @@ public class Song {
     private String songName;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Album album;
 
     private Integer duration;
@@ -24,6 +27,7 @@ public class Song {
 
     @JsonBackReference
     @ManyToMany(mappedBy = "songs", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Playlist> playlists = new HashSet<>();
 
     private Integer rating;

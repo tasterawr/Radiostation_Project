@@ -1,7 +1,7 @@
 package org.example.view;
 
 import org.example.DAL.Models.*;
-import org.example.controllers.*;
+import org.example.services.*;
 import org.example.util.JsonConverter;
 
 import java.util.ArrayList;
@@ -9,32 +9,28 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Navigation implements View {
-    private Scanner input = new Scanner(System.in);
-    private final AlbumController albumController = new AlbumController();
-    private final ArtistController artistController = new ArtistController();
-    private final GenreController genreController = new GenreController();
-    private final LabelController labelController = new LabelController();
-    private final PlaylistController playlistController = new PlaylistController();
-    private final RadioDjController radioDjController = new RadioDjController();
-    private final RadioProgramController radioProgramController = new RadioProgramController();
-    private final SongController songController = new SongController();
-    private final DBUserController userController = new DBUserController();
+    private final Scanner input = new Scanner(System.in);
+    private final AlbumService albumService = new AlbumService();
+    private final ArtistService artistService = new ArtistService();
+    private final GenreService genreService = new GenreService();
+    private final LabelService labelService = new LabelService();
+    private final PlaylistService playlistService = new PlaylistService();
+    private final RadioDjService radioDjService = new RadioDjService();
+    private final RadioProgramService radioProgramService = new RadioProgramService();
+    private final SongService songService = new SongService();
+    private final DBUserService dbUserService = new DBUserService();
 
     //<editor-fold desc="Pages display section">
 
     @Override
     public void displayLoginPage() {
-        boolean show = true;
-        String email = "";
-        String password = "";
-
-        while(show){
+        while(true){
             System.out.println("----------------------------");
             System.out.println("Enter login and password: ");
 
             String[] loginAndPass = input.nextLine().split(" ");
 
-            boolean result = userController.checkLogin(loginAndPass[0], loginAndPass[1]);
+            boolean result = dbUserService.checkLogin(loginAndPass[0], loginAndPass[1]);
 
             if (result){
                 System.out.println("Successful login.");
@@ -62,6 +58,7 @@ public class Navigation implements View {
             System.out.println("6. Labels");
             System.out.println("7. Radio programs");
             System.out.println("8. Radio Djs");
+            System.out.println("9. User Info");
             System.out.println("0. Exit");
             System.out.println("----------------------------");
 
@@ -98,6 +95,9 @@ public class Navigation implements View {
                 case (8):
                     displayRadioDjPage();
                     break;
+                case (9):
+                    displayLoginToUserPage();
+                    break;
                 case (0):
                     show = false;
                     break;
@@ -106,6 +106,39 @@ public class Navigation implements View {
                     break;
             }
         }
+    }
+
+    private void displayLoginToUserPage() {
+        String[] loginAndPass;
+
+        while(true){
+            System.out.println("----------------------------");
+            System.out.println("Access to this page is secured.");
+            System.out.println("Enter login and password (or 'return' to go back to menu): ");
+
+            String str = input.nextLine();
+
+            if (str.equals("return")){
+                return;
+            }
+
+            if (str.split(" ").length == 1){
+                continue;
+            }
+
+            loginAndPass = str.split(" ");
+
+            boolean result = dbUserService.checkLogin(loginAndPass[0], loginAndPass[1]);
+
+            if (result){
+                System.out.println("Successful login.");
+                break;
+            }
+            else
+                System.out.println("Error: Wrong login or password.");
+        }
+
+        displayUserPage(loginAndPass[0], loginAndPass[1]);
     }
 
     @Override
@@ -525,6 +558,73 @@ public class Navigation implements View {
 
     //</editor-fold>
 
+    //<editor-fold desc="User display section">
+
+    private void displayUserPage(String login, String password) {
+        boolean show = true;
+        while(show){
+            System.out.println("   <-----[USER PAGE]------------");
+            System.out.println("    Choose an option below:");
+            System.out.println("    1. Change login");
+            System.out.println("    2. Change password");
+            System.out.println("    0. Main menu");
+            System.out.println("   <----------------------------");
+
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(NumberFormatException e){
+                option = 100;
+            }
+
+            switch (option){
+                case(1):
+                    login = displayChangeLoginPage(login, password);
+                    break;
+                case(2):
+                    password = displayChangePasswordPage(login, password);
+                    break;
+                case(0):
+                    show = false;
+                    break;
+            }
+        }
+    }
+
+    private String displayChangePasswordPage(String login, String password) {
+        while(true){
+            System.out.println("----------------------------");
+            System.out.println("Enter new password:");
+            String newPassword = input.nextLine();
+
+            System.out.println("Enter new password again:");
+            String newPasswordCheck = input.nextLine();
+
+            if (newPassword.equals(newPasswordCheck)){
+                dbUserService.setPassword(login, password, newPassword);
+                System.out.println("Password update successful.");
+                return newPassword;
+            }
+            else{
+                System.out.println("Passwords don't match.");
+            }
+        }
+    }
+
+    private String displayChangeLoginPage(String login, String password) {
+        System.out.println("----------------------------");
+        System.out.println("Enter new login:");
+
+        String newLogin = input.nextLine();
+
+        dbUserService.setLogin(login, password, newLogin);
+        System.out.println("Login update successful.");
+        return newLogin;
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="Playlist display section">
 
     private void displayEditPlaylistPage() {
@@ -533,7 +633,7 @@ public class Navigation implements View {
 
         Long playlistId = Long.parseLong(input.nextLine());
 
-        if (playlistController.getPlaylistById(playlistId) == null){
+        if (playlistService.getPlaylistById(playlistId) == null){
             System.out.println("Error: Unsuccessful. No playlist with such id.");
             return;
         }
@@ -579,7 +679,7 @@ public class Navigation implements View {
         System.out.println("Enter id of a song to delete:");
 
         Long songId = Long.parseLong(input.nextLine());
-        boolean result = playlistController.removeSongFromPlaylist(playlistId, songId);
+        boolean result = playlistService.removeSongFromPlaylist(playlistId, songId);
 
         if (result)
             System.out.println("Song was removed successfully.");
@@ -592,7 +692,7 @@ public class Navigation implements View {
         System.out.println("Enter id of a song to add:");
 
         Long songId = Long.parseLong(input.nextLine());
-        boolean result = playlistController.addSongToPlaylist(playlistId, songId);
+        boolean result = playlistService.addSongToPlaylist(playlistId, songId);
 
         if (result)
             System.out.println("Song was added successfully.");
@@ -605,7 +705,7 @@ public class Navigation implements View {
         System.out.println("Enter new name of the playlist:");
 
         String newPlaylistName = input.nextLine();
-        boolean result = playlistController.updatePlaylistName(playlistId, newPlaylistName);
+        boolean result = playlistService.updatePlaylistName(playlistId, newPlaylistName);
 
         if (result)
             System.out.println("Playlist update successful.");
@@ -628,7 +728,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = playlistController.deletePlaylist(playlistName);
+                    result = playlistService.deletePlaylist(playlistName);
                     if (result)
                         System.out.println("Playlist successfully deleted.");
                     else
@@ -649,7 +749,7 @@ public class Navigation implements View {
         Long playlistId = Long.parseLong(input.nextLine());
 
         boolean show = true;
-        boolean result = false;
+        boolean result;
 
         while(show){
             System.out.println("Are you sure you want to delete the playlist? (y/n)");
@@ -657,7 +757,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = playlistController.deletePlaylist(playlistId);
+                    result = playlistService.deletePlaylist(playlistId);
                     if (result)
                         System.out.println("Playlist successfully deleted.");
                     else
@@ -679,7 +779,7 @@ public class Navigation implements View {
         System.out.println("1. Enter playlist name:");
         playlistName = input.nextLine();
 
-        boolean result = playlistController.addPlaylist(playlistName);
+        boolean result = playlistService.addPlaylist(playlistName);
 
         if (result)
             System.out.println("Playlist added successfully.");
@@ -692,7 +792,7 @@ public class Navigation implements View {
         System.out.println("Enter playlist name: ");
 
         String playlistName = input.nextLine();
-        Playlist playlist = playlistController.getPlaylistByName(playlistName);
+        Playlist playlist = playlistService.getPlaylistByName(playlistName);
 
         if (playlist != null)
             System.out.println(JsonConverter.getConvertedToJson(playlist));
@@ -705,7 +805,7 @@ public class Navigation implements View {
         System.out.println("Enter playlist id: ");
 
         Long playlistId = Long.parseLong(input.nextLine());
-        Playlist playlist = playlistController.getPlaylistById(playlistId);
+        Playlist playlist = playlistService.getPlaylistById(playlistId);
 
         if (playlist != null)
             System.out.println(JsonConverter.getConvertedToJson(playlist));
@@ -721,14 +821,14 @@ public class Navigation implements View {
 
         System.out.println("All songs:");
 
-        List<Song> songs = new ArrayList<Song>(playlistController.getPlaylistSongs(playlistId));
+        List<Song> songs = new ArrayList<>(playlistService.getPlaylistSongs(playlistId));
         System.out.println(JsonConverter.getConvertedToJson(songs));
     }
 
     private void displayAllPlaylistsPage() {
         System.out.println("--------------------------------");
         System.out.println("All playlists:");
-        List<Playlist> playlists = playlistController.getAllPlaylists();
+        List<Playlist> playlists = playlistService.getAllPlaylists();
         System.out.println(JsonConverter.getConvertedToJson(playlists));
     }
 
@@ -742,7 +842,7 @@ public class Navigation implements View {
 
         Long radioProgramId = Long.parseLong(input.nextLine());
 
-        if (radioProgramController.getProgramById(radioProgramId) == null){
+        if (radioProgramService.getProgramById(radioProgramId) == null){
             System.out.println("Error: Unsuccessful. No radio program with such id.");
             return;
         }
@@ -796,7 +896,7 @@ public class Navigation implements View {
         System.out.println("Enter playlist id to remove:");
 
         Long playlistId = Long.parseLong(input.nextLine());
-        boolean result = radioProgramController.removePlaylistFromProgram(radioProgramId, playlistId);
+        boolean result = radioProgramService.removePlaylistFromProgram(radioProgramId, playlistId);
 
         if (result)
             System.out.println("Playlist was successfully removed.");
@@ -809,7 +909,7 @@ public class Navigation implements View {
         System.out.println("Enter playlist id to add:");
 
         Long playlistId = Long.parseLong(input.nextLine());
-        boolean result = radioProgramController.addPlaylistToProgram(radioProgramId, playlistId);
+        boolean result = radioProgramService.addPlaylistToProgram(radioProgramId, playlistId);
 
         if (result)
             System.out.println("Playlist was successfully added.");
@@ -822,7 +922,7 @@ public class Navigation implements View {
         System.out.println("Enter new monthly listeners of the radio program:");
 
         int newMonthlyListeners = Integer.parseInt(input.nextLine());
-        radioProgramController.updateMonthlyListeners(radioProgramId, newMonthlyListeners);
+        radioProgramService.updateMonthlyListeners(radioProgramId, newMonthlyListeners);
         System.out.println("Radio program update successful.");
     }
 
@@ -831,7 +931,7 @@ public class Navigation implements View {
         System.out.println("Enter new monthly listeners of the radio program:");
 
         int newMonthlyListeners = Integer.parseInt(input.nextLine());
-        boolean result = radioProgramController.updateMonthlyListeners(radioProgramId, newMonthlyListeners);
+        boolean result = radioProgramService.updateMonthlyListeners(radioProgramId, newMonthlyListeners);
 
         if (result)
             System.out.println("Radio program update successful.");
@@ -844,7 +944,7 @@ public class Navigation implements View {
         System.out.println("Enter new name of the radio program:");
 
         String newRadioProgramName = input.nextLine();
-        boolean result = radioProgramController.updateRadioProgramName(radioProgramId, newRadioProgramName);
+        boolean result = radioProgramService.updateRadioProgramName(radioProgramId, newRadioProgramName);
 
         if (result)
             System.out.println("Radio program update successful.");
@@ -867,7 +967,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = radioProgramController.deleteRadioProgram(radioProgramName);
+                    result = radioProgramService.deleteRadioProgram(radioProgramName);
                     if (result)
                         System.out.println("Radio program successfully deleted.");
                     else
@@ -896,7 +996,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = radioProgramController.deleteRadioProgram(radioProgramId);
+                    result = radioProgramService.deleteRadioProgram(radioProgramId);
                     if (result)
                         System.out.println("Radio program successfully deleted.");
                     else
@@ -926,7 +1026,7 @@ public class Navigation implements View {
         System.out.println("3. Enter radio program song order price:");
         songOrderPrice = Integer.parseInt(input.nextLine());
 
-        boolean result = radioProgramController.addRadioProgram(radioProgramName, monthlyListeners, songOrderPrice);
+        boolean result = radioProgramService.addRadioProgram(radioProgramName, monthlyListeners, songOrderPrice);
 
         if (result)
             System.out.println("Radio program added successfully.");
@@ -943,7 +1043,7 @@ public class Navigation implements View {
 
         System.out.println("All playlists:");
 
-        List<Playlist> playlists = new ArrayList<Playlist>(radioProgramController.getProgramPlaylists(radioProgramId));
+        List<Playlist> playlists = new ArrayList<>(radioProgramService.getProgramPlaylists(radioProgramId));
         System.out.println(JsonConverter.getConvertedToJson(playlists));
     }
 
@@ -952,7 +1052,7 @@ public class Navigation implements View {
         System.out.println("Enter radio program name: ");
 
         String radioProgramName = input.nextLine();
-        RadioProgram radioProgram = radioProgramController.getProgramByName(radioProgramName);
+        RadioProgram radioProgram = radioProgramService.getProgramByName(radioProgramName);
 
         if (radioProgram != null)
             System.out.println(JsonConverter.getConvertedToJson(radioProgram));
@@ -965,7 +1065,7 @@ public class Navigation implements View {
         System.out.println("Enter radio program id: ");
 
         Long radioProgramId = Long.parseLong(input.nextLine());
-        RadioProgram radioProgram = radioProgramController.getProgramById(radioProgramId);
+        RadioProgram radioProgram = radioProgramService.getProgramById(radioProgramId);
 
         if (radioProgram != null)
             System.out.println(JsonConverter.getConvertedToJson(radioProgram));
@@ -976,7 +1076,7 @@ public class Navigation implements View {
     private void displayAllRadioProgramsPage() {
         System.out.println("--------------------------------");
         System.out.println("All radio programs:");
-        List<RadioProgram> radioPrograms = radioProgramController.getAllRadioPrograms();
+        List<RadioProgram> radioPrograms = radioProgramService.getAllRadioPrograms();
         System.out.println(JsonConverter.getConvertedToJson(radioPrograms));
     }
 
@@ -990,7 +1090,7 @@ public class Navigation implements View {
 
         Long djId = Long.parseLong(input.nextLine());
 
-        if (radioDjController.getRadioDjById(djId) == null){
+        if (radioDjService.getRadioDjById(djId) == null){
             System.out.println("Error: Unsuccessful. No dj with such id.");
             return;
         }
@@ -1032,7 +1132,7 @@ public class Navigation implements View {
         System.out.println("Enter new name of the dj:");
 
         String newDjName = input.nextLine();
-        radioDjController.updateRadioDjName(djId, newDjName);
+        radioDjService.updateRadioDjName(djId, newDjName);
         System.out.println("Dj update successful.");
     }
 
@@ -1041,7 +1141,7 @@ public class Navigation implements View {
         System.out.println("Enter new nickname of the dj:");
 
         String newDjNickname = input.nextLine();
-        radioDjController.updateDjNickname(djId, newDjNickname);
+        radioDjService.updateDjNickname(djId, newDjNickname);
         System.out.println("Dj update successful.");
     }
 
@@ -1060,7 +1160,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = radioDjController.deleteDj(djId);
+                    result = radioDjService.deleteDj(djId);
                     if (result)
                         System.out.println("Dj successfully deleted.");
                     else
@@ -1086,7 +1186,7 @@ public class Navigation implements View {
         System.out.println("2. Enter dj nickname:");
         djNickname = input.nextLine();
 
-        boolean result = radioDjController.addRadioDj(djName, djNickname);
+        boolean result = radioDjService.addRadioDj(djName, djNickname);
 
         if (result)
             System.out.println("Dj added successfully.");
@@ -1099,7 +1199,7 @@ public class Navigation implements View {
         System.out.println("Enter dj id: ");
 
         Long djId = Long.parseLong(input.nextLine());
-        RadioDj radioDj = radioDjController.getRadioDjById(djId);
+        RadioDj radioDj = radioDjService.getRadioDjById(djId);
 
         if (radioDj != null)
             System.out.println(JsonConverter.getConvertedToJson(radioDj));
@@ -1110,7 +1210,7 @@ public class Navigation implements View {
     private void displayAllDjsPage() {
         System.out.println("--------------------------------");
         System.out.println("All djs:");
-        List<RadioDj> radioDjs = radioDjController.getAllRadioDjs();
+        List<RadioDj> radioDjs = radioDjService.getAllRadioDjs();
         System.out.println(JsonConverter.getConvertedToJson(radioDjs));
     }
 
@@ -1124,7 +1224,7 @@ public class Navigation implements View {
 
         Long songId = Long.parseLong(input.nextLine());
 
-        if (songController.getSongById(songId) == null){
+        if (songService.getSongById(songId) == null){
             System.out.println("Error: Unsuccessful. No song with such id.");
             return;
         }
@@ -1178,7 +1278,7 @@ public class Navigation implements View {
         System.out.println("Enter new rating of the song:");
 
         int newRating = Integer.parseInt(input.nextLine());
-        songController.updateRating(songId, newRating);
+        songService.updateRating(songId, newRating);
     }
 
     private void displayChangeSongMonthlyOrdersPage(Long songId) {
@@ -1186,7 +1286,7 @@ public class Navigation implements View {
         System.out.println("Enter new monthly orders of the song:");
 
         int newMonthlyOrders = Integer.parseInt(input.nextLine());
-        songController.updateMonthlyOrders(songId, newMonthlyOrders);
+        songService.updateMonthlyOrders(songId, newMonthlyOrders);
     }
 
     private void displayChangeSongDurationPage(Long songId) {
@@ -1194,7 +1294,7 @@ public class Navigation implements View {
         System.out.println("Enter new duration of the song:");
 
         int newDuration = Integer.parseInt(input.nextLine());
-        songController.updateDuration(songId, newDuration);
+        songService.updateDuration(songId, newDuration);
     }
 
     private void displayChangeSongAlbumPage(Long songId) {
@@ -1202,7 +1302,7 @@ public class Navigation implements View {
         System.out.println("Enter new album id of the song:");
 
         Long newAlbumId = Long.parseLong(input.nextLine());
-        boolean result = songController.updateSongAlbum(songId, newAlbumId);
+        boolean result = songService.updateSongAlbum(songId, newAlbumId);
 
         if (result)
             System.out.println("Song update successful.");
@@ -1215,7 +1315,7 @@ public class Navigation implements View {
         System.out.println("Enter new name of the song:");
 
         String newSongName = input.nextLine();
-        songController.updateSongName(songId, newSongName);
+        songService.updateSongName(songId, newSongName);
         System.out.println("Song update successful.");
     }
 
@@ -1234,7 +1334,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = songController.deleteSong(songId);
+                    result = songService.deleteSong(songId);
                     if (result)
                         System.out.println("Song successfully deleted.");
                     else
@@ -1272,7 +1372,7 @@ public class Navigation implements View {
         System.out.println("5. Enter rating:");
         rating = Integer.parseInt(input.nextLine());
 
-        boolean result = songController.addSong(songName, albumId, duration, monthlyOrders, rating);
+        boolean result = songService.addSong(songName, albumId, duration, monthlyOrders, rating);
 
         if (!result) {
             System.out.println("Error: Unsuccessful. Invalid album ID.");
@@ -1285,7 +1385,7 @@ public class Navigation implements View {
         System.out.println("Enter song id: ");
 
         Long songId = Long.parseLong(input.nextLine());
-        Song song = songController.getSongById(songId);
+        Song song = songService.getSongById(songId);
 
         if (song != null)
             System.out.println(JsonConverter.getConvertedToJson(song));
@@ -1296,7 +1396,7 @@ public class Navigation implements View {
     private void displayAllSongsPage() {
         System.out.println("--------------------------------");
         System.out.println("All songs:");
-        List<Song> songs = songController.getAllSongs();
+        List<Song> songs = songService.getAllSongs();
         System.out.println(JsonConverter.getConvertedToJson(songs));
     }
 
@@ -1310,7 +1410,7 @@ public class Navigation implements View {
 
         Long labelId = Long.parseLong(input.nextLine());
 
-        if (labelController.getLabelById(labelId) == null){
+        if (labelService.getLabelById(labelId) == null){
             System.out.println("Error: Unsuccessful. No label with such id.");
             return;
         }
@@ -1352,7 +1452,7 @@ public class Navigation implements View {
         System.out.println("Enter new creation date of the label (YYYY-M-D):");
 
         String newCreationDate = input.nextLine();
-        boolean result = labelController.updateLabelCreationDate(labelId, newCreationDate);
+        boolean result = labelService.updateLabelCreationDate(labelId, newCreationDate);
 
         if (result)
             System.out.println("Label update successful.");
@@ -1365,7 +1465,7 @@ public class Navigation implements View {
         System.out.println("Enter new name of the label:");
 
         String newLabelName = input.nextLine();
-        boolean result = labelController.updateLabelName(labelId, newLabelName);
+        boolean result = labelService.updateLabelName(labelId, newLabelName);
 
         if (result)
             System.out.println("Label update successful.");
@@ -1388,7 +1488,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = labelController.deleteLabel(labelId);
+                    result = labelService.deleteLabel(labelId);
                     if (result)
                         System.out.println("Label successfully deleted.");
                     else
@@ -1414,7 +1514,7 @@ public class Navigation implements View {
         System.out.println("2. Enter label creation date (YYYY-M-D):");
         labelCreationDate = input.nextLine();
 
-        boolean result = labelController.addLabel(labelName, labelCreationDate);
+        boolean result = labelService.addLabel(labelName, labelCreationDate);
 
         if (!result)
             System.out.println("Error: Unsuccessful. Label with such name exists or invalid date format.");
@@ -1427,7 +1527,7 @@ public class Navigation implements View {
         System.out.println("Enter label id: ");
 
         Long labelId = Long.parseLong(input.nextLine());
-        Label label = labelController.getLabelById(labelId);
+        Label label = labelService.getLabelById(labelId);
 
         if (label != null)
             System.out.println(JsonConverter.getConvertedToJson(label));
@@ -1438,7 +1538,7 @@ public class Navigation implements View {
     private void displayAllLabelsPage() {
         System.out.println("--------------------------------");
         System.out.println("All labels:");
-        List<Label> labels = labelController.getAllLabels();
+        List<Label> labels = labelService.getAllLabels();
         System.out.println(JsonConverter.getConvertedToJson(labels));
     }
 
@@ -1452,7 +1552,7 @@ public class Navigation implements View {
 
         Long genreCode = Long.parseLong(input.nextLine());
 
-        if (genreController.getGenreByCode(genreCode) == null){
+        if (genreService.getGenreByCode(genreCode) == null){
             System.out.println("Error: Unsuccessful. No genre with such code.");
             return;
         }
@@ -1494,7 +1594,7 @@ public class Navigation implements View {
         System.out.println("Enter new description of the genre:");
 
         String newGenreDescription = input.nextLine();
-        genreController.setGenreDescription(genreCode, newGenreDescription);
+        genreService.setGenreDescription(genreCode, newGenreDescription);
     }
 
     private void displayChangeGenreNamePage(Long genreCode) {
@@ -1502,7 +1602,7 @@ public class Navigation implements View {
         System.out.println("Enter new name of the genre:");
 
         String newGenreName = input.nextLine();
-        boolean result = genreController.setGenreName(genreCode, newGenreName);
+        boolean result = genreService.setGenreName(genreCode, newGenreName);
 
         if (result)
             System.out.println("Genre update successful.");
@@ -1517,7 +1617,7 @@ public class Navigation implements View {
         String genreName = input.nextLine();
 
         boolean show = true;
-        boolean result = false;
+        boolean result;
 
         while(show){
             System.out.println("Are you sure you want to delete the genre? (y/n)");
@@ -1525,7 +1625,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = genreController.deleteGenre(genreName);
+                    result = genreService.deleteGenre(genreName);
                     if (result)
                         System.out.println("Genre successfully deleted.");
                     else
@@ -1546,7 +1646,7 @@ public class Navigation implements View {
         Long genreCode = Long.parseLong(input.nextLine());
 
         boolean show = true;
-        boolean result = false;
+        boolean result;
 
         while(show){
             System.out.println("Are you sure you want to delete the genre? (y/n)");
@@ -1554,7 +1654,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = artistController.deleteArtist(genreCode);
+                    result = artistService.deleteArtist(genreCode);
                     if (result)
                         System.out.println("Genre successfully deleted.");
                     else
@@ -1580,9 +1680,9 @@ public class Navigation implements View {
         System.out.println("2. Enter genre description:");
         genreDescription = input.nextLine();
 
-        boolean result = genreController.addGenre(genreName, genreDescription);
+        boolean result = genreService.addGenre(genreName, genreDescription);
 
-        if (result == false)
+        if (!result)
             System.out.println("Error: Unsuccessful. Genre with such name already exists.");
         else
             System.out.println("Genre added successfully.");
@@ -1593,7 +1693,7 @@ public class Navigation implements View {
         System.out.println("Enter genre code: ");
 
         Long genreCode = Long.parseLong(input.nextLine());
-        Genre genre = genreController.getGenreByCode(genreCode);
+        Genre genre = genreService.getGenreByCode(genreCode);
 
         if (genre != null)
             System.out.println(JsonConverter.getConvertedToJson(genre));
@@ -1604,7 +1704,7 @@ public class Navigation implements View {
     private void displayAllGenresPage() {
         System.out.println("--------------------------------");
         System.out.println("All genres:");
-        List<Genre> genres = genreController.getAllGenres();
+        List<Genre> genres = genreService.getAllGenres();
         System.out.println(JsonConverter.getConvertedToJson(genres));
     }
 
@@ -1618,7 +1718,7 @@ public class Navigation implements View {
 
         Long id = Long.parseLong(input.nextLine());
 
-        if (artistController.getArtistById(id) == null){
+        if (artistService.getArtistById(id) == null){
             System.out.println("Error: Unsuccessful. No artist with such ID.");
             return;
         }
@@ -1664,7 +1764,7 @@ public class Navigation implements View {
         System.out.println("Enter new artist rating:");
 
         int newRating = Integer.parseInt(input.nextLine());
-        boolean result = artistController.updateArtistRating(id, newRating);
+        boolean result = artistService.updateArtistRating(id, newRating);
 
         if (result)
             System.out.println("Artist update successful.");
@@ -1677,7 +1777,7 @@ public class Navigation implements View {
         System.out.println("Enter new career begin date of the artist (YYYY-M-D):");
 
         String newCareerBeginDate = input.nextLine();
-        boolean result = artistController.updateArtistCareerBeginDate(id, newCareerBeginDate);
+        boolean result = artistService.updateArtistCareerBeginDate(id, newCareerBeginDate);
 
         if (result)
             System.out.println("Artist update successful.");
@@ -1690,7 +1790,7 @@ public class Navigation implements View {
         System.out.println("Enter new name of the artist:");
 
         String newArtistName = input.nextLine();
-        boolean result = artistController.updateArtistName(id, newArtistName);
+        boolean result = artistService.updateArtistName(id, newArtistName);
 
         if (result)
             System.out.println("Artist update successful.");
@@ -1713,7 +1813,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = artistController.deleteArtist(name);
+                    result = artistService.deleteArtist(name);
                     if (result)
                         System.out.println("Artist successfully deleted.");
                     else
@@ -1742,7 +1842,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = artistController.deleteArtist(id);
+                    result = artistService.deleteArtist(id);
                     if (result)
                         System.out.println("Artist successfully deleted.");
                     else
@@ -1772,7 +1872,7 @@ public class Navigation implements View {
         System.out.println("3. Enter artist rating:");
         rating = Integer.parseInt(input.nextLine());
 
-        boolean result = artistController.addArtist(artistName, careerBeginDate, rating);
+        boolean result = artistService.addArtist(artistName, careerBeginDate, rating);
 
         if (!result) {
             System.out.println("Error: Unsuccessful. Artist with such name already exists.");
@@ -1785,7 +1885,7 @@ public class Navigation implements View {
         System.out.println("Enter id: ");
 
         String name = input.nextLine();
-        Artist artist = artistController.getArtistByName(name);
+        Artist artist = artistService.getArtistByName(name);
 
         if (artist != null)
             System.out.println(JsonConverter.getConvertedToJson(artist));
@@ -1798,7 +1898,7 @@ public class Navigation implements View {
         System.out.println("Enter id: ");
 
         Long id = Long.parseLong(input.nextLine());
-        Artist artist = artistController.getArtistById(id);
+        Artist artist = artistService.getArtistById(id);
 
         if (artist != null)
             System.out.println(JsonConverter.getConvertedToJson(artist));
@@ -1809,7 +1909,7 @@ public class Navigation implements View {
     private void displayAllArtistsPage() {
         System.out.println("--------------------------------");
         System.out.println("All artists:");
-        List<Artist> artists = artistController.getAllArtists();
+        List<Artist> artists = artistService.getAllArtists();
         System.out.println(JsonConverter.getConvertedToJson(artists));
     }
 
@@ -1823,7 +1923,7 @@ public class Navigation implements View {
 
         Long id = Long.parseLong(input.nextLine());
 
-        if (albumController.getAlbumById(id) == null){
+        if (albumService.getAlbumById(id) == null){
             System.out.println("Error: Unsuccessful. No album with such ID.");
             return;
         }
@@ -1877,7 +1977,7 @@ public class Navigation implements View {
         System.out.println("Enter new number of tracks:");
 
         Integer newNumOfTracks = Integer.parseInt(input.nextLine());
-        albumController.updateNumberOfTracks(id, newNumOfTracks);
+        albumService.updateNumberOfTracks(id, newNumOfTracks);
         System.out.println("Album update successful.");
     }
 
@@ -1886,7 +1986,7 @@ public class Navigation implements View {
         System.out.println("Enter new artist ID:");
 
         Long artistId = Long.parseLong(input.nextLine());
-        albumController.updateAlbumArtist(id, artistId);
+        albumService.updateAlbumArtist(id, artistId);
         System.out.println("Album update successful.");
     }
 
@@ -1895,7 +1995,7 @@ public class Navigation implements View {
         System.out.println("Enter new artist name:");
 
         String artistName = input.nextLine();
-        albumController.updateAlbumArtist(id, artistName);
+        albumService.updateAlbumArtist(id, artistName);
         System.out.println("Album update successful.");
     }
 
@@ -1904,7 +2004,7 @@ public class Navigation implements View {
         System.out.println("Enter new genre code:");
 
         Long genreCode = Long.parseLong(input.nextLine());
-        albumController.updateAlbumGenre(id, genreCode);
+        albumService.updateAlbumGenre(id, genreCode);
         System.out.println("Album update successful.");
     }
 
@@ -1913,7 +2013,7 @@ public class Navigation implements View {
         System.out.println("Enter new name of the album:");
 
         String newAlbumName = input.nextLine();
-        albumController.updateAlbumName(id, newAlbumName);
+        albumService.updateAlbumName(id, newAlbumName);
         System.out.println("Album update successful.");
     }
 
@@ -1932,7 +2032,7 @@ public class Navigation implements View {
             String option = input.nextLine();
             switch (option){
                 case("y"):
-                    result = albumController.deleteAlbum(id);
+                    result = albumService.deleteAlbum(id);
                     if (result)
                         System.out.println("Album successfully deleted.");
                     else
@@ -1970,7 +2070,7 @@ public class Navigation implements View {
         System.out.println("5. Enter label id:");
         labelId = Long.parseLong(input.nextLine());
 
-        boolean result = albumController.addAlbum(albumName, genreCode, artistId, numberOfTracks, labelId);
+        boolean result = albumService.addAlbum(albumName, genreCode, artistId, numberOfTracks, labelId);
 
         if (!result)
             System.out.println("Error: Unsuccessful. Invalid data.");
@@ -1983,7 +2083,7 @@ public class Navigation implements View {
         System.out.println("Enter id: ");
 
         Long id = Long.parseLong(input.nextLine());
-        Album album = albumController.getAlbumById(id);
+        Album album = albumService.getAlbumById(id);
 
         if (album != null)
             System.out.println(JsonConverter.getConvertedToJson(album));
@@ -1994,7 +2094,7 @@ public class Navigation implements View {
     private void displayAllAlbumsPage() {
         System.out.println("--------------------------------");
         System.out.println("All albums:");
-        List<Album> albums = albumController.getAllAlbums();
+        List<Album> albums = albumService.getAllAlbums();
         System.out.println(JsonConverter.getConvertedToJson(albums));
     }
     //</editor-fold>

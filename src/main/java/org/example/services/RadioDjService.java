@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.DAL.DAO.RadioDjDAO;
 import org.example.DAL.Models.RadioDj;
@@ -6,7 +6,7 @@ import org.example.DAL.repositories.RadioDjRepository;
 
 import java.util.List;
 
-public class RadioDjController {
+public class RadioDjService {
     private static RadioDjDAO radioDjRepository = new RadioDjRepository();
 
     public boolean addRadioDj(String djName, String djNickname){

@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.DAL.DAO.PlaylistDAO;
 import org.example.DAL.DAO.RadioProgramDAO;
@@ -8,9 +8,8 @@ import org.example.DAL.repositories.PlaylistRepository;
 import org.example.DAL.repositories.RadioProgramRepository;
 
 import java.util.List;
-import java.util.Set;
 
-public class RadioProgramController {
+public class RadioProgramService {
     private static RadioProgramDAO radioProgramRepository = new RadioProgramRepository();
     private static PlaylistDAO playlistRepository = new PlaylistRepository();
 

@@ -1,5 +1,8 @@
 package org.example.DAL.Models;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,6 +28,7 @@ public class RadioProgram {
             joinColumns = { @JoinColumn(name = "program_id") },
             inverseJoinColumns = { @JoinColumn(name = "playlist_id") }
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Playlist> playlists = new ArrayList<>();
 
     public RadioProgram() {

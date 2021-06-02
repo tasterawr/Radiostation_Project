@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.DAL.DAO.LabelDAO;
 import org.example.DAL.Models.Label;
@@ -7,7 +7,7 @@ import org.example.DAL.repositories.LabelRepository;
 import java.sql.Date;
 import java.util.List;
 
-public class LabelController {
+public class LabelService {
     private static LabelDAO labelRepository = new LabelRepository();
 
     public boolean addLabel(String labelName, String labelCreationDate){

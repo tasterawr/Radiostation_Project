@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.DAL.DAO.GenreDAO;
 import org.example.DAL.Models.Genre;
@@ -6,7 +6,7 @@ import org.example.DAL.repositories.GenreRepository;
 
 import java.util.List;
 
-public class GenreController {
+public class GenreService {
     private static GenreDAO genreRepository = new GenreRepository();
 
     public boolean addGenre(String genreName, String description){

@@ -3,6 +3,8 @@ package org.example.DAL.Models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.example.util.HibernateUtil;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
