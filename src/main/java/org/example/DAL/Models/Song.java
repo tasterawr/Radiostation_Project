@@ -1,6 +1,10 @@
 package org.example.DAL.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -18,8 +22,11 @@ public class Song {
 
     private Integer monthlyOrders;
 
-    @ManyToMany(mappedBy = "songs", cascade = CascadeType.ALL)
-    private Set<Playlist> playlists;
+    @JsonBackReference
+    @ManyToMany(mappedBy = "songs", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Playlist> playlists = new HashSet<>();
+
+    private Integer rating;
 
     public Song() {
 
@@ -73,5 +80,20 @@ public class Song {
         this.rating = rating;
     }
 
-    private Integer rating;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Song song = (Song) o;
+        return Objects.equals(id, song.id) && Objects.equals(songName, song.songName) && Objects.equals(album, song.album) && Objects.equals(duration, song.duration) && Objects.equals(monthlyOrders, song.monthlyOrders) && Objects.equals(playlists, song.playlists) && Objects.equals(rating, song.rating);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, songName, album, duration, monthlyOrders, playlists, rating);
+    }
+
+    public void removePlaylist(Playlist playlist){
+        playlists.remove(playlist);
+    }
 }

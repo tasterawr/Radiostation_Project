@@ -82,6 +82,7 @@ public class PlaylistController {
             Song song = songRepository.getById(songId);
 
             playlist.addSong(song);
+            playlistRepository.update(playlist);
             return true;
         }
         catch(Exception e){
@@ -95,6 +96,8 @@ public class PlaylistController {
             Song song = songRepository.getById(songId);
 
             playlist.removeSong(song);
+            song.removePlaylist(playlist);
+            playlistRepository.update(playlist);
             return true;
         }
         catch(Exception e){
@@ -102,7 +105,7 @@ public class PlaylistController {
         }
     }
 
-    public Set<Song> getPlaylistSongs(Long playlistId){
+    public List<Song> getPlaylistSongs(Long playlistId){
         try{
             Playlist playlist = playlistRepository.getById(playlistId);
 

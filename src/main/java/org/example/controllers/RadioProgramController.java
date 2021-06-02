@@ -57,7 +57,7 @@ public class RadioProgramController {
         }
     }
 
-    public Set<Playlist> getProgramPlaylists(Long programId){
+    public List<Playlist> getProgramPlaylists(Long programId){
         try{
             RadioProgram radioProgram = radioProgramRepository.getById(programId);
 

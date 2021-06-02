@@ -6,12 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class RadioDj {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
-
-    private String djName;
+public class RadioDj extends Employee{
+    private String djNickname;
 
     public RadioDj() {
 
@@ -25,11 +21,11 @@ public class RadioDj {
         this.id = id;
     }
 
-    public String getDjName() {
-        return djName;
+    public String getDjNickname() {
+        return djNickname;
     }
 
-    public void setDjName(String djName) {
-        this.djName = djName;
+    public void setDjNickname(String djNickname) {
+        this.djNickname = djNickname;
     }
 }

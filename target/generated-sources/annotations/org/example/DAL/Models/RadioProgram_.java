@@ -1,7 +1,7 @@
 package org.example.DAL.Models;
 
 import javax.annotation.Generated;
-import javax.persistence.metamodel.SetAttribute;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -11,7 +11,7 @@ public abstract class RadioProgram_ {
 
 	public static volatile SingularAttribute<RadioProgram, String> radioProgramName;
 	public static volatile SingularAttribute<RadioProgram, Integer> monthlyListeners;
-	public static volatile SetAttribute<RadioProgram, Playlist> playlists;
+	public static volatile ListAttribute<RadioProgram, Playlist> playlists;
 	public static volatile SingularAttribute<RadioProgram, Long> id;
 	public static volatile SingularAttribute<RadioProgram, Integer> songOrderPrice;
 

@@ -1,5 +1,7 @@
 package org.example.DAL.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -12,6 +14,7 @@ public class Label {
     @Column(unique = true)
     private String labelName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date labelCreationDate;
 
     public Label() {

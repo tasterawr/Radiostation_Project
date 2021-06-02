@@ -1,6 +1,7 @@
 package org.example.DAL.Models;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Album {
@@ -74,5 +75,16 @@ public class Album {
         this.numberOfTracks = numberOfTracks;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Album album = (Album) o;
+        return Objects.equals(id, album.id) && Objects.equals(albumName, album.albumName) && Objects.equals(genre, album.genre) && Objects.equals(artist, album.artist) && Objects.equals(numberOfTracks, album.numberOfTracks) && Objects.equals(label, album.label);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, albumName, genre, artist, numberOfTracks, label);
+    }
 }

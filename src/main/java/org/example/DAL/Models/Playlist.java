@@ -1,8 +1,16 @@
 package org.example.DAL.Models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.example.util.HibernateUtil;
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Playlist {
@@ -12,19 +20,20 @@ public class Playlist {
 
     private String playlistName;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Playlist_songs",
             joinColumns = { @JoinColumn(name = "playlist_id") },
             inverseJoinColumns = { @JoinColumn(name = "song_id") }
     )
-    private Set<Song> songs = new HashSet<>();
+    private List<Song> songs = new ArrayList<>();
 
-    public Set<Song> getSongs() {
+    public List<Song> getSongs() {
         return songs;
     }
 
-    @ManyToMany(mappedBy = "playlists",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "playlists",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<RadioProgram> programs = new HashSet<>();
 
     public Playlist() {
@@ -47,11 +56,13 @@ public class Playlist {
         this.playlistName = playlistName;
     }
 
+    @Transactional
     public void addSong(Song song){
         songs.add(song);
     }
 
     public void removeSong(Song song){
-        songs.remove(song);
+        songs.removeIf(x -> x.getId() == song.getId());
+        return;
     }
 }

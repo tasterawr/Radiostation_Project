@@ -1,7 +1,9 @@
 package org.example.DAL.Models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,20 +19,20 @@ public class RadioProgram {
 
     private Integer songOrderPrice;
 
-    public Set<Playlist> getPlaylists() {
-        return playlists;
-    }
-
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Program_playlists",
             joinColumns = { @JoinColumn(name = "program_id") },
             inverseJoinColumns = { @JoinColumn(name = "playlist_id") }
     )
-    private Set<Playlist> playlists = new HashSet<>();
+    private List<Playlist> playlists = new ArrayList<>();
 
     public RadioProgram() {
 
+    }
+
+    public List<Playlist> getPlaylists() {
+        return playlists;
     }
 
     public Long getId() {
@@ -70,6 +72,6 @@ public class RadioProgram {
     }
 
     public void removePlaylist(Playlist playlist){
-        playlists.remove(playlist);
+        playlists.removeIf(x -> x.getId() == playlist.getId());
     }
 }

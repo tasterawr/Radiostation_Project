@@ -4,7 +4,7 @@ import org.example.DAL.Models.*;
 import org.example.controllers.*;
 import org.example.util.JsonConverter;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,6 +19,8 @@ public class Navigation implements View {
     private final RadioProgramController radioProgramController = new RadioProgramController();
     private final SongController songController = new SongController();
     private final DBUserController userController = new DBUserController();
+
+    //<editor-fold desc="Pages display section">
 
     @Override
     public void displayLoginPage() {
@@ -63,7 +65,13 @@ public class Navigation implements View {
             System.out.println("0. Exit");
             System.out.println("----------------------------");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
 
             switch (option) {
                 case (1):
@@ -115,7 +123,14 @@ public class Navigation implements View {
             System.out.println("    0. Main menu");
             System.out.println("   <----------------------------");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option) {
                 case (1):
                     displayAllAlbumsPage();
@@ -134,6 +149,8 @@ public class Navigation implements View {
                     break;
                 case (0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -156,7 +173,14 @@ public class Navigation implements View {
             System.out.println("    0. Main menu");
             System.out.println("   <----------------------------");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option) {
                 case (1):
                     displayAllArtistsPage();
@@ -181,6 +205,8 @@ public class Navigation implements View {
                 case (0):
                     show = false;
                     break;
+                default:
+                    break;
             }
         }
     }
@@ -201,7 +227,15 @@ public class Navigation implements View {
             System.out.println("    0. Main menu");
             System.out.println("   <----------------------------");
 
-            int option = Integer.parseInt(input.nextLine());
+
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option) {
                 case (1):
                     displayAllGenresPage();
@@ -223,6 +257,8 @@ public class Navigation implements View {
                 case (0):
                     show = false;
                     break;
+                default:
+                    break;
             }
         }
     }
@@ -242,7 +278,14 @@ public class Navigation implements View {
             System.out.println("    0. Main menu");
             System.out.println("   <----------------------------");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option) {
                 case (1):
                     displayAllLabelsPage();
@@ -261,6 +304,8 @@ public class Navigation implements View {
                 case (0):
                     show = false;
                     break;
+                default:
+                    break;
             }
         }
     }
@@ -273,39 +318,52 @@ public class Navigation implements View {
             System.out.println("   <-----[PLAYLIST PAGE]--------");
             System.out.println("    Choose an option below:");
             System.out.println("    1. Show all playlists");
-            System.out.println("    2. Show playlist by id");
-            System.out.println("    3. Show playlist by name");
-            System.out.println("    4. Add playlist");
-            System.out.println("    5. Delete playlist by id");
-            System.out.println("    6. Delete playlist by name");
-            System.out.println("    7. Edit playlist");
+            System.out.println("    2. Show playlist songs");
+            System.out.println("    3. Show playlist by id");
+            System.out.println("    4. Show playlist by name");
+            System.out.println("    5. Add playlist");
+            System.out.println("    6. Delete playlist by id");
+            System.out.println("    7. Delete playlist by name");
+            System.out.println("    8. Edit playlist");
             System.out.println("    0. Main menu");
             System.out.println("   <----------------------------");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option) {
                 case (1):
                     displayAllPlaylistsPage();
                     break;
                 case (2):
-                    displayPlaylistByIdPage();
+                    displayPlaylistSongsPage();
                     break;
                 case (3):
-                    displayPlaylistByNamePage();
+                    displayPlaylistByIdPage();
                     break;
                 case (4):
-                    displayAddPlaylistPage();
+                    displayPlaylistByNamePage();
                     break;
                 case (5):
-                    displayDeletePlaylistByIdPage();
+                    displayAddPlaylistPage();
                     break;
                 case (6):
+                    displayDeletePlaylistByIdPage();
+                    break;
+                case (7):
                     displayDeletePlaylistByNamePage();
                     break;
-                case(7):
+                case(8):
                     displayEditPlaylistPage();
                 case (0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -326,7 +384,14 @@ public class Navigation implements View {
             System.out.println("    0. Main menu");
             System.out.println("   <----------------------------");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option) {
                 case (1):
                     displayAllDjsPage();
@@ -345,6 +410,8 @@ public class Navigation implements View {
                 case (0):
                     show = false;
                     break;
+                default:
+                    break;
             }
         }
     }
@@ -359,14 +426,22 @@ public class Navigation implements View {
             System.out.println("    1. Show all radio programs");
             System.out.println("    2. Show radio program by id");
             System.out.println("    3. Show radio program by name");
-            System.out.println("    4. Add radio program");
-            System.out.println("    5. Delete radio program by id");
-            System.out.println("    6. Delete radio program by name");
-            System.out.println("    7. Edit radio program");
+            System.out.println("    4. Show radio program playlists");
+            System.out.println("    5. Add radio program");
+            System.out.println("    6. Delete radio program by id");
+            System.out.println("    7. Delete radio program by name");
+            System.out.println("    8. Edit radio program");
             System.out.println("    0. Main menu");
             System.out.println("   <----------------------------");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option) {
                 case (1):
                     displayAllRadioProgramsPage();
@@ -378,19 +453,24 @@ public class Navigation implements View {
                     displayRadioProgramByNamePage();
                     break;
                 case (4):
+                    displayProgramPlaylistsPage();
+                    break;
+                case (5):
                     displayAddRadioProgramPage();
                     break;
-                case(5):
+                case(6):
                     displayDeleteRadioProgramByIdPage();
                     break;
-                case(6):
+                case(7):
                     displayDeleteRadioProgramByNamePage();
                     break;
-                case(7):
+                case(8):
                     displayEditRadioProgramPage();
                     break;
                 case (0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -411,7 +491,14 @@ public class Navigation implements View {
             System.out.println("    0. Main menu");
             System.out.println("   <----------------------------");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option) {
                 case (1):
                     displayAllSongsPage();
@@ -430,9 +517,13 @@ public class Navigation implements View {
                 case (0):
                     show = false;
                     break;
+                default:
+                    break;
             }
         }
     }
+
+    //</editor-fold>
 
     //<editor-fold desc="Playlist display section">
 
@@ -456,7 +547,14 @@ public class Navigation implements View {
             System.out.println("        3. Remove song from the playlist");
             System.out.println("        0. Back to playlist menu");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option){
                 case(1):
                     displayChangePlaylistNamePage(playlistId);
@@ -469,6 +567,8 @@ public class Navigation implements View {
                     break;
                 case(0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -613,6 +713,18 @@ public class Navigation implements View {
             System.out.println("No playlist with such ID.");
     }
 
+    private void displayPlaylistSongsPage() {
+        System.out.println("--------------------------------");
+        System.out.println("Enter playlist id: ");
+
+        Long playlistId = Long.parseLong(input.nextLine());
+
+        System.out.println("All songs:");
+
+        List<Song> songs = new ArrayList<Song>(playlistController.getPlaylistSongs(playlistId));
+        System.out.println(JsonConverter.getConvertedToJson(songs));
+    }
+
     private void displayAllPlaylistsPage() {
         System.out.println("--------------------------------");
         System.out.println("All playlists:");
@@ -646,7 +758,14 @@ public class Navigation implements View {
             System.out.println("        5. Delete playlist from radio program");
             System.out.println("        0. Back to radio program menu");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option){
                 case(1):
                     displayChangeRadioProgramNamePage(radioProgramId);
@@ -665,6 +784,8 @@ public class Navigation implements View {
                     break;
                 case(0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -813,6 +934,19 @@ public class Navigation implements View {
             System.out.println("Error: Unsuccessful. Radio program with such name already exists.");
     }
 
+
+    private void displayProgramPlaylistsPage() {
+        System.out.println("--------------------------------");
+        System.out.println("Enter radio program id: ");
+
+        Long radioProgramId = Long.parseLong(input.nextLine());
+
+        System.out.println("All playlists:");
+
+        List<Playlist> playlists = new ArrayList<Playlist>(radioProgramController.getProgramPlaylists(radioProgramId));
+        System.out.println(JsonConverter.getConvertedToJson(playlists));
+    }
+
     private void displayRadioProgramByNamePage() {
         System.out.println("--------------------------------");
         System.out.println("Enter radio program name: ");
@@ -866,15 +1000,28 @@ public class Navigation implements View {
             System.out.println("--------------------------------");
             System.out.println("        Choose what to edit: ");
             System.out.println("        1. Change dj name");
+            System.out.println("        2. Change dj nickname");
             System.out.println("        0. Back to radio dj menu");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option){
                 case(1):
                     displayChangeDjNamePage(djId);
                     break;
+                case(2):
+                    displayChangeDjNicknamePage(djId);
+                    break;
                 case(0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -886,6 +1033,15 @@ public class Navigation implements View {
 
         String newDjName = input.nextLine();
         radioDjController.updateRadioDjName(djId, newDjName);
+        System.out.println("Dj update successful.");
+    }
+
+    private void displayChangeDjNicknamePage(Long djId) {
+        System.out.println("--------------------------------");
+        System.out.println("Enter new nickname of the dj:");
+
+        String newDjNickname = input.nextLine();
+        radioDjController.updateDjNickname(djId, newDjNickname);
         System.out.println("Dj update successful.");
     }
 
@@ -920,14 +1076,22 @@ public class Navigation implements View {
 
     private void displayAddDjPage() {
         String djName;
+        String djNickname;
 
         System.out.println("--------------------------------");
         System.out.println("Enter input data.");
         System.out.println("1. Enter dj name:");
         djName = input.nextLine();
 
-        radioDjController.addRadioDj(djName);
-        System.out.println("Dj added successfully.");
+        System.out.println("2. Enter dj nickname:");
+        djNickname = input.nextLine();
+
+        boolean result = radioDjController.addRadioDj(djName, djNickname);
+
+        if (result)
+            System.out.println("Dj added successfully.");
+        else
+            System.out.println("Error: Unsuccessful. Dj with such nickname already exists.");
     }
 
     private void displayDjByIdPage() {
@@ -976,7 +1140,14 @@ public class Navigation implements View {
             System.out.println("        5. Change song rating");
             System.out.println("        0. Back to song menu");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option){
                 case(1):
                     displayChangeSongNamePage(songId);
@@ -995,6 +1166,8 @@ public class Navigation implements View {
                     break;
                 case(0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -1150,7 +1323,14 @@ public class Navigation implements View {
             System.out.println("        2. Change label creation date");
             System.out.println("        0. Back to label menu");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option){
                 case(1):
                     displayChangeLabelNamePage(labelId);
@@ -1160,6 +1340,8 @@ public class Navigation implements View {
                     break;
                 case(0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -1283,7 +1465,14 @@ public class Navigation implements View {
             System.out.println("        2. Change genre description");
             System.out.println("        0. Back to genre menu");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option){
                 case(1):
                     displayChangeGenreNamePage(genreCode);
@@ -1293,6 +1482,8 @@ public class Navigation implements View {
                     break;
                 case(0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -1441,7 +1632,14 @@ public class Navigation implements View {
             System.out.println("        3. Change artist rating");
             System.out.println("        0. Back to artist menu");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option){
                 case(1):
                     displayChangeArtistNamePage(id);
@@ -1454,6 +1652,8 @@ public class Navigation implements View {
                     break;
                 case(0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -1637,9 +1837,16 @@ public class Navigation implements View {
             System.out.println("        3. Change artist by ID");
             System.out.println("        4. Change artist by name");
             System.out.println("        5. Change number of tracks");
-            System.out.println("        6. Back to album menu");
+            System.out.println("        0. Back to album menu");
 
-            int option = Integer.parseInt(input.nextLine());
+            int option;
+            try{
+                option = Integer.parseInt(input.nextLine());
+            }
+            catch(Exception e){
+                option = 100;
+            }
+
             switch (option){
                 case(1):
                     displayChangeAlbumNamePage(id);
@@ -1656,8 +1863,10 @@ public class Navigation implements View {
                 case(5):
                     displayChangeAlbNumOfTracksPage(id);
                     break;
-                case(6):
+                case(0):
                     show = false;
+                    break;
+                default:
                     break;
             }
         }

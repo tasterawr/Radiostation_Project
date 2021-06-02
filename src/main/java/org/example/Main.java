@@ -96,39 +96,52 @@ public class Main {
         song1.setRating(14);
 
         Song song2 = new Song();
-        song1.setSongName("My Apocalypse");
-        song1.setAlbum(album1);
-        song1.setDuration(301);
-        song1.setMonthlyOrders(4);
-        song1.setRating(8);
+        song2.setSongName("My Apocalypse");
+        song2.setAlbum(album1);
+        song2.setDuration(301);
+        song2.setMonthlyOrders(4);
+        song2.setRating(8);
 
         Song song3 = new Song();
-        song1.setSongName("Let It Happen");
-        song1.setAlbum(album2);
-        song1.setDuration(486);
-        song1.setMonthlyOrders(12);
-        song1.setRating(24);
+        song3.setSongName("Let It Happen");
+        song3.setAlbum(album2);
+        song3.setDuration(486);
+        song3.setMonthlyOrders(12);
+        song3.setRating(24);
 
         Song song4 = new Song();
-        song1.setSongName("Yes I'm Changing");
-        song1.setAlbum(album2);
-        song1.setDuration(270);
-        song1.setMonthlyOrders(10);
-        song1.setRating(20);
+        song4.setSongName("Yes I'm Changing");
+        song4.setAlbum(album2);
+        song4.setDuration(270);
+        song4.setMonthlyOrders(10);
+        song4.setRating(20);
 
         Song song5 = new Song();
-        song1.setSongName("Something I Do");
-        song1.setAlbum(album3);
-        song1.setDuration(225);
-        song1.setMonthlyOrders(8);
-        song1.setRating(16);
+        song5.setSongName("Something I Do");
+        song5.setAlbum(album3);
+        song5.setDuration(225);
+        song5.setMonthlyOrders(8);
+        song5.setRating(16);
 
         Song song6 = new Song();
-        song1.setSongName("Lie To Me");
-        song1.setAlbum(album3);
-        song1.setDuration(304);
-        song1.setMonthlyOrders(7);
-        song1.setRating(14);
+        song6.setSongName("Lie To Me");
+        song6.setAlbum(album3);
+        song6.setDuration(304);
+        song6.setMonthlyOrders(7);
+        song6.setRating(14);
+
+        RadioDj dj1 = new RadioDj();
+        dj1.setName("Волков Александр");
+        dj1.setDjNickname("Dj Ez");
+
+        RadioDj dj2 = new RadioDj();
+        dj2.setName("Клим Сергей");
+        dj2.setDjNickname("Клим");
+
+        Playlist pl = new Playlist();
+        pl.setPlaylistName("Crazy Mix");
+        pl.addSong(song1);
+        pl.addSong(song2);
 
         session.save(artist1);
         session.save(artist2);
@@ -149,6 +162,9 @@ public class Main {
         session.save(song4);
         session.save(song5);
         session.save(song6);
+        session.save(dj1);
+        session.save(dj2);
+        session.save(pl);
 
         transaction.commit();
         session.close();

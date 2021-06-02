@@ -1,18 +1,16 @@
 package org.example.DAL.Models;
 
-import javax.annotation.processing.Generated;
+import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
 @Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
 @StaticMetamodel(RadioDj.class)
-public abstract class RadioDj_ {
+public abstract class RadioDj_ extends org.example.DAL.Models.Employee_ {
 
-	public static volatile SingularAttribute<RadioDj, Long> id;
-	public static volatile SingularAttribute<RadioDj, String> djName;
+	public static volatile SingularAttribute<RadioDj, String> djNickname;
 
-	public static final String ID = "id";
-	public static final String DJ_NAME = "djName";
+	public static final String DJ_NICKNAME = "djNickname";
 
 }
 

@@ -65,7 +65,7 @@ public class RadioDjRepository implements RadioDjDAO {
     }
 
     @Override
-    public RadioDj getByName(String djName) throws NoResultException {
+    public RadioDj getByNickname(String djNickname) throws NoResultException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -73,7 +73,7 @@ public class RadioDjRepository implements RadioDjDAO {
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<RadioDj> query = criteriaBuilder.createQuery(RadioDj.class);
         Root<RadioDj> radioDjRoot = query.from(RadioDj.class);
-        query.where(criteriaBuilder.equal(radioDjRoot.get(RadioDj_.djName), djName));
+        query.where(criteriaBuilder.equal(radioDjRoot.get(RadioDj_.djNickname), djNickname));
         query.select(radioDjRoot);
 
         RadioDj radioDj = session.createQuery(query).getSingleResult();

@@ -9,11 +9,19 @@ import java.util.List;
 public class RadioDjController {
     private static RadioDjDAO radioDjRepository = new RadioDjRepository();
 
-    public void addRadioDj(String djName){
-        RadioDj radioDj = new RadioDj();
-        radioDj.setDjName(djName);
+    public boolean addRadioDj(String djName, String djNickname){
+        try{
+            radioDjRepository.getByNickname(djNickname);
+            return false;
+        }
+        catch (Exception e){
+            RadioDj radioDj = new RadioDj();
+            radioDj.setName(djName);
+            radioDj.setDjNickname(djName);
 
-        radioDjRepository.add(radioDj);
+            radioDjRepository.add(radioDj);
+            return true;
+        }
     }
 
     public List<RadioDj> getAllRadioDjs(){
@@ -29,19 +37,32 @@ public class RadioDjController {
         }
     }
 
-    public RadioDj getRadioDjByName(String djName){
+    public RadioDj getRadioDjByName(String djNickname){
         try{
-            return radioDjRepository.getByName(djName);
+            return radioDjRepository.getByNickname(djNickname);
         }
         catch (Exception e){
             return null;
         }
     }
 
+    public boolean updateDjNickname(Long djId, String newNickname){
+        try{
+            RadioDj radioDj = radioDjRepository.getById(djId);
+            radioDj.setDjNickname(newNickname);
+
+            radioDjRepository.update(radioDj);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
     public boolean updateRadioDjName(Long djId, String newRadioDjName){
         try{
             RadioDj radioDj = radioDjRepository.getById(djId);
-            radioDj.setDjName(newRadioDjName);
+            radioDj.setName(newRadioDjName);
 
             radioDjRepository.update(radioDj);
             return true;
