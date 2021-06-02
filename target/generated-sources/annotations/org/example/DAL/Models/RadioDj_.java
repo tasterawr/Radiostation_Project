@@ -9,8 +9,10 @@ import javax.persistence.metamodel.StaticMetamodel;
 public abstract class RadioDj_ extends org.example.DAL.Models.Employee_ {
 
 	public static volatile SingularAttribute<RadioDj, String> djNickname;
+	public static volatile SingularAttribute<RadioDj, RadioProgram> program;
 
 	public static final String DJ_NICKNAME = "djNickname";
+	public static final String PROGRAM = "program";
 
 }
 

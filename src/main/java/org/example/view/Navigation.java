@@ -1101,6 +1101,7 @@ public class Navigation implements View {
             System.out.println("        Choose what to edit: ");
             System.out.println("        1. Change dj name");
             System.out.println("        2. Change dj nickname");
+            System.out.println("        3. Change dj program");
             System.out.println("        0. Back to radio dj menu");
 
             int option;
@@ -1118,6 +1119,9 @@ public class Navigation implements View {
                 case(2):
                     displayChangeDjNicknamePage(djId);
                     break;
+                case(3):
+                    displayChangeDjProgramPage(djId);
+                    break;
                 case(0):
                     show = false;
                     break;
@@ -1125,6 +1129,15 @@ public class Navigation implements View {
                     break;
             }
         }
+    }
+
+    private void displayChangeDjProgramPage(Long djId) {
+        System.out.println("--------------------------------");
+        System.out.println("Enter new program id of the dj:");
+
+        Long newProgramId = Long.parseLong(input.nextLine());
+        radioDjService.updateRadioDjProgram(djId, newProgramId);
+        System.out.println("Dj update successful.");
     }
 
     private void displayChangeDjNamePage(Long djId) {
@@ -1177,6 +1190,7 @@ public class Navigation implements View {
     private void displayAddDjPage() {
         String djName;
         String djNickname;
+        Long djProgramId;
 
         System.out.println("--------------------------------");
         System.out.println("Enter input data.");
@@ -1186,7 +1200,10 @@ public class Navigation implements View {
         System.out.println("2. Enter dj nickname:");
         djNickname = input.nextLine();
 
-        boolean result = radioDjService.addRadioDj(djName, djNickname);
+        System.out.println("3. Enter dj program id:");
+        djProgramId = Long.parseLong(input.nextLine());
+
+        boolean result = radioDjService.addRadioDj(djName, djNickname, djProgramId);
 
         if (result)
             System.out.println("Dj added successfully.");
@@ -1800,7 +1817,7 @@ public class Navigation implements View {
 
     private void displayDeleteArtistByNamePage() {
         System.out.println("--------------------------------");
-        System.out.println("Enter ID of an artist to delete:");
+        System.out.println("Enter name of an artist to delete:");
 
         String name = input.nextLine();
 
@@ -1882,7 +1899,7 @@ public class Navigation implements View {
 
     private void displayArtistByNamePage() {
         System.out.println("--------------------------------");
-        System.out.println("Enter id: ");
+        System.out.println("Enter name: ");
 
         String name = input.nextLine();
         Artist artist = artistService.getArtistByName(name);
@@ -1977,8 +1994,12 @@ public class Navigation implements View {
         System.out.println("Enter new number of tracks:");
 
         Integer newNumOfTracks = Integer.parseInt(input.nextLine());
-        albumService.updateNumberOfTracks(id, newNumOfTracks);
-        System.out.println("Album update successful.");
+        boolean result = albumService.updateNumberOfTracks(id, newNumOfTracks);
+
+        if (result)
+            System.out.println("Album update successful.");
+        else
+            System.out.println("Error: Unsuccessful. Invalid album id.");
     }
 
     private void displayChangeAlbumArtistIdPage(Long id) {
@@ -1986,8 +2007,12 @@ public class Navigation implements View {
         System.out.println("Enter new artist ID:");
 
         Long artistId = Long.parseLong(input.nextLine());
-        albumService.updateAlbumArtist(id, artistId);
-        System.out.println("Album update successful.");
+        boolean result = albumService.updateAlbumArtist(id, artistId);
+
+        if(result)
+            System.out.println("Album update successful.");
+        else
+            System.out.println("Error: Unsuccessful. Invalid album id.");
     }
 
     private void displayChangeAlbumArtistNamePage(Long id) {
@@ -1995,8 +2020,12 @@ public class Navigation implements View {
         System.out.println("Enter new artist name:");
 
         String artistName = input.nextLine();
-        albumService.updateAlbumArtist(id, artistName);
-        System.out.println("Album update successful.");
+        boolean result = albumService.updateAlbumArtist(id, artistName);
+
+        if (result)
+            System.out.println("Album update successful.");
+        else
+            System.out.println("Error: Unsuccessful. Invalid album id.");
     }
 
     private void displayChangeAlbumGenrePage(Long id) {
@@ -2004,8 +2033,12 @@ public class Navigation implements View {
         System.out.println("Enter new genre code:");
 
         Long genreCode = Long.parseLong(input.nextLine());
-        albumService.updateAlbumGenre(id, genreCode);
-        System.out.println("Album update successful.");
+        boolean result = albumService.updateAlbumGenre(id, genreCode);
+
+        if (result)
+            System.out.println("Album update successful.");
+        else
+            System.out.println("Error: Unsuccessful. Invalid album id.");
     }
 
     private void displayChangeAlbumNamePage(Long id) {
@@ -2013,8 +2046,12 @@ public class Navigation implements View {
         System.out.println("Enter new name of the album:");
 
         String newAlbumName = input.nextLine();
-        albumService.updateAlbumName(id, newAlbumName);
-        System.out.println("Album update successful.");
+        boolean result = albumService.updateAlbumName(id, newAlbumName);
+
+        if (result)
+            System.out.println("Album update successful.");
+        else
+            System.out.println("Error: Unsuccessful. Invalid album id.");
     }
 
     private void displayDeleteAlbumPage() {

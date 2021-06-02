@@ -13,6 +13,7 @@ import org.example.DAL.repositories.ArtistRepository;
 import org.example.DAL.repositories.GenreRepository;
 import org.example.DAL.repositories.LabelRepository;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class AlbumService {
@@ -50,48 +51,78 @@ public class AlbumService {
         try{
             return albumRepository.getById(id);
         }
-        catch(Exception e){
+        catch(NoResultException e){
             return null;
         }
 
     }
 
-    public void updateAlbumName(Long albumId, String newAlbumName){
-        Album album = albumRepository.getById(albumId);
-        album.setAlbumName(newAlbumName);
+    public boolean updateAlbumName(Long albumId, String newAlbumName){
+        try {
+            Album album = albumRepository.getById(albumId);
+            album.setAlbumName(newAlbumName);
 
-        albumRepository.update(album);
+            albumRepository.update(album);
+            return true;
+        }
+        catch (NoResultException e){
+            return false;
+        }
     }
 
-    public void updateAlbumGenre(Long albumId, Long genreCode){
-        Album album = albumRepository.getById(albumId);
-        Genre genre = genreRepository.getByGenreCode(genreCode);
-        album.setGenre(genre);
+    public boolean updateAlbumGenre(Long albumId, Long genreCode){
+        try{
+            Album album = albumRepository.getById(albumId);
+            Genre genre = genreRepository.getByGenreCode(genreCode);
+            album.setGenre(genre);
 
-        albumRepository.update(album);
+            albumRepository.update(album);
+            return true;
+        }
+        catch (NoResultException e){
+            return false;
+        }
     }
 
-    public void updateAlbumArtist(Long albumId, Long newArtistId){
-        Album album = albumRepository.getById(albumId);
-        Artist artist = artistRepository.getById(newArtistId);
-        album.setArtist(artist);
+    public boolean updateAlbumArtist(Long albumId, Long newArtistId){
+        try{
+            Album album = albumRepository.getById(albumId);
+            Artist artist = artistRepository.getById(newArtistId);
+            album.setArtist(artist);
 
-        albumRepository.update(album);
+            albumRepository.update(album);
+            return true;
+        }
+        catch (NoResultException e){
+            return false;
+        }
     }
 
-    public void updateAlbumArtist(Long albumId, String newArtistName){
-        Album album = albumRepository.getById(albumId);
-        Artist artist = artistRepository.getByName(newArtistName);
-        album.setArtist(artist);
+    public boolean updateAlbumArtist(Long albumId, String newArtistName){
+        try{
+            Album album = albumRepository.getById(albumId);
+            Artist artist = artistRepository.getByName(newArtistName);
+            album.setArtist(artist);
 
-        albumRepository.update(album);
+            albumRepository.update(album);
+            return true;
+        }
+        catch (NoResultException e){
+            return false;
+        }
     }
 
-    public void updateNumberOfTracks(Long albumId, Integer newNumOfTracks){
-        Album album = albumRepository.getById(albumId);
-        album.setNumberOfTracks(newNumOfTracks);
+    public boolean updateNumberOfTracks(Long albumId, Integer newNumOfTracks){
+        try{
+            Album album = albumRepository.getById(albumId);
+            album.setNumberOfTracks(newNumOfTracks);
 
-        albumRepository.update(album);
+            albumRepository.update(album);
+            return true;
+        }
+        catch (NoResultException e){
+            return false;
+        }
     }
 
     public boolean deleteAlbum(Long albumId){

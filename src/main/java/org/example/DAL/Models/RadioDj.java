@@ -1,13 +1,13 @@
 package org.example.DAL.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class RadioDj extends Employee{
     private String djNickname;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private RadioProgram program;
 
     public RadioDj() {
 
@@ -27,5 +27,13 @@ public class RadioDj extends Employee{
 
     public void setDjNickname(String djNickname) {
         this.djNickname = djNickname;
+    }
+
+    public RadioProgram getProgram() {
+        return program;
+    }
+
+    public void setProgram(RadioProgram program) {
+        this.program = program;
     }
 }
